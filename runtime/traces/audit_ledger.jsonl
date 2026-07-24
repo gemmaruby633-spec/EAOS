@@ -201,7 +201,13 @@
 {"tx_id": "TX-AMEND-141CCA14", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
 {"tx_id": "TX-AMEND-37895397", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
 {"tx_id": "TX-AMEND-DDAB1625", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
+<<<<<<< HEAD
 {"tx_id": "TX-AMEND-9A90FCCD", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
 {"tx_id": "TX-AMEND-3267D47A", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
 {"tx_id": "TX-AMEND-E5516D0A", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
 {"tx_id": "TX-AMEND-EAC79A84", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
+=======
+{"tx_id": "TX-AMEND-B8A8DA36", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
+>>>>>>> 197b3c2 (feat(core): prepare final updates for main branch)
+{"tx_id": "TX-AMEND-77C973C2", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
+{"tx_id": "TX-AMEND-E3A0C6E9", "action": "CONSTITUTIONAL_AMENDMENT_RATIFIED", "timestamp": "2026-07-23T05:10:00Z", "amendment_id": "AMD-2026-001", "target_rule": "R09_EXECUTABLE_ARCH", "approvals": 3}
