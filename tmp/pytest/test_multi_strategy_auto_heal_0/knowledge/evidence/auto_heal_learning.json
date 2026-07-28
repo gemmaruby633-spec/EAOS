@@ -1,0 +1,25 @@
+[
+  {
+    "incident_id": "INC-1785160908",
+    "command": "uv run task lint",
+    "successful_strategy": "Strategy 2: Ruff Unsafe Fixes",
+    "attempts": [
+      {
+        "strategy_id": "STRAT-01",
+        "strategy_name": "Strategy 1: Syntax Sanitization",
+        "success": false,
+        "execution_time_ms": 0.002,
+        "output": "Strategy failed. Initiating automatic rollback."
+      },
+      {
+        "strategy_id": "STRAT-02",
+        "strategy_name": "Strategy 2: Ruff Unsafe Fixes",
+        "success": true,
+        "execution_time_ms": 0.001,
+        "output": "Strategy passed quality gate."
+      }
+    ],
+    "rolled_back_attempts": 1,
+    "status": "RESOLVED"
+  }
+]

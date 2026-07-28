@@ -1,0 +1,1 @@
+# governance Specification: capability.md

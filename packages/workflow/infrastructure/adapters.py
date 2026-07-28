@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 from packages.workflow.domain.models import (
     State,

@@ -1,10 +1,42 @@
 {
   "score": 100,
-  "active_packages": 43,
+  "active_packages": 74,
   "violations": 0,
   "metrics": {
+    "accounting": {
+      "package_name": "accounting",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "agent": {
       "package_name": "agent",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "ai_agent": {
+      "package_name": "ai_agent",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "ai_gateway": {
+      "package_name": "ai_gateway",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "ai_governance": {
+      "package_name": "ai_governance",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -59,6 +91,14 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "business_architecture": {
+      "package_name": "business_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "capability": {
       "package_name": "capability",
       "afferent_coupling": 0,
@@ -99,8 +139,48 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "crm": {
+      "package_name": "crm",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "customer_service": {
+      "package_name": "customer_service",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "data_architecture": {
+      "package_name": "data_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "devops_platform": {
+      "package_name": "devops_platform",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "domain": {
       "package_name": "domain",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "enterprise_generator": {
+      "package_name": "enterprise_generator",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -147,6 +227,14 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "frameworks": {
+      "package_name": "frameworks",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "governance": {
       "package_name": "governance",
       "afferent_coupling": 0,
@@ -157,6 +245,14 @@
     },
     "governance_loop": {
       "package_name": "governance_loop",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "hr": {
+      "package_name": "hr",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -187,8 +283,24 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "integration_architecture": {
+      "package_name": "integration_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "intelligence": {
       "package_name": "intelligence",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "it_governance": {
+      "package_name": "it_governance",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -219,6 +331,30 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "legal_governance": {
+      "package_name": "legal_governance",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "manufacturing": {
+      "package_name": "manufacturing",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "marketing": {
+      "package_name": "marketing",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "marketplace": {
       "package_name": "marketplace",
       "afferent_coupling": 0,
@@ -243,6 +379,46 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "modeling_standards": {
+      "package_name": "modeling_standards",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "monetization": {
+      "package_name": "monetization",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "observability": {
+      "package_name": "observability",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "operating_model_frameworks": {
+      "package_name": "operating_model_frameworks",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "platform": {
+      "package_name": "platform",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "policy_engine": {
       "package_name": "policy_engine",
       "afferent_coupling": 0,
@@ -259,8 +435,40 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "process_architecture": {
+      "package_name": "process_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "product": {
+      "package_name": "product",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "project": {
+      "package_name": "project",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "reflection": {
       "package_name": "reflection",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "sales": {
+      "package_name": "sales",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -275,8 +483,32 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "security_architecture": {
+      "package_name": "security_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "self_hosting": {
+      "package_name": "self_hosting",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "self_rewrite": {
       "package_name": "self_rewrite",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "service": {
+      "package_name": "service",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,
@@ -299,8 +531,24 @@
       "abstractness": 0.5,
       "distance": 0.0
     },
+    "solution_architecture": {
+      "package_name": "solution_architecture",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
     "specification": {
       "package_name": "specification",
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "instability": 0.0,
+      "abstractness": 0.5,
+      "distance": 0.0
+    },
+    "swarm_intelligence": {
+      "package_name": "swarm_intelligence",
       "afferent_coupling": 0,
       "efferent_coupling": 0,
       "instability": 0.0,

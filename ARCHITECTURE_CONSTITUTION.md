@@ -94,3 +94,8 @@ Architecture serves Business.
 Business fulfills Purpose.
 Observability remembers Execution.
 Governance enables Evolution.
+### P12 — Ecosystem Before Reinvention
+
+EAOS builds what is unique, integrates what already exists.
+
+The enterprise core shall govern, orchestrate, and integrate external ecosystem capabilities (GitHub, Notion, n8n, Stripe, OpenTelemetry) through Hexagonal Ports & Adapters rather than reinventing commodity software.

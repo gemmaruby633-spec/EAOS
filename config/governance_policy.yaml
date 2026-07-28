@@ -1,0 +1,10 @@
+version: "v3.0"
+policy_name: "Enterprise Architecture Governance Policy"
+base_health_score: 100.0
+fitness_rules:
+  hexagonal_boundary:
+    enabled: true
+    penalty_per_violation: 10.0
+  empty_directory:
+    enabled: true
+    penalty_per_directory: 2.0

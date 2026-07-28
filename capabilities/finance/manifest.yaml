@@ -1,0 +1,5 @@
+capability_id: "CAP-FIN-01"
+name: "Finance and FinOps Ledger"
+owner: "Solopreneur / Finance Agent"
+bounded_context: "packages/finance"
+version: "1.0.0"

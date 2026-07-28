@@ -1,0 +1,20 @@
+version: "1.0.0"
+enterprise:
+  name: "AI Digital Company"
+  type: "Autonomous Solopreneur Enterprise"
+  vision: "Xay dung AI Digital Company van hanh tu dong 24/7"
+  mission: "Ung dung AI tu dong hoa san xuat noi dung va tao dong tien thu dong"
+  goals_3yr:
+    users: 1000000
+    customers: 100000
+    automation_rate: 0.95
+revenue_streams:
+  - id: REV-01
+    name: "Affiliate Marketing"
+    type: "Passive Commission"
+  - id: REV-02
+    name: "Digital Products"
+    type: "Notion and n8n Templates"
+  - id: REV-03
+    name: "AdSense and Media"
+    type: "Organic Traffic Ads"

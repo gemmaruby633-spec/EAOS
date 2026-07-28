@@ -1,0 +1,5 @@
+capability_id: "CAP-MFG-01"
+name: "Manufacturing and Production Execution"
+owner: "Operations Lead / MES Agent"
+bounded_context: "packages/manufacturing"
+version: "1.0.0"

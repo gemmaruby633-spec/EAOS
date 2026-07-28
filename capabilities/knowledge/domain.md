@@ -1,0 +1,1 @@
+# knowledge Specification: domain.md

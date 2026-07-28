@@ -1,0 +1,5 @@
+capability_id: "CAP-SRV-01"
+name: "Service Delivery and SLA Management"
+owner: "Service Director / Customer Success Agent"
+bounded_context: "packages/service"
+version: "1.0.0"

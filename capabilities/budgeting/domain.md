@@ -1,0 +1,1 @@
+# budgeting Specification: domain.md

@@ -1,3 +1,4 @@
+from typing import cast
 from pydantic import BaseModel
 
 from packages.capability.domain.models import BusinessCapability
@@ -15,4 +16,4 @@ class RegisterCapabilityUseCase:
         self.registry = registry
 
     def execute(self, capability: BusinessCapability) -> BusinessCapability:
-        return self.registry.register(capability)
+        return cast(BusinessCapability, self.registry.register(capability))

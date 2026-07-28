@@ -1,0 +1,42 @@
+{
+  "title": "EAOS Cybernetic Control Room Dashboard",
+  "tags": [
+    "eaos",
+    "observability",
+    "architecture"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Architectural Health Score",
+      "type": "gauge",
+      "targets": [
+        {
+          "expr": "eaos_architecture_health_score"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "API P99 Latency (ms)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "eaos_api_p99_latency_ms"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Architectural Drift Index",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "eaos_architecture_drift_index"
+        }
+      ]
+    }
+  ]
+}

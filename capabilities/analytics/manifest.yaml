@@ -1,0 +1,5 @@
+capability_id: "CAP-ANA-01"
+name: "Analytics and Business Health"
+owner: "Solopreneur / Executive Agent"
+bounded_context: "packages/analytics"
+version: "1.0.0"

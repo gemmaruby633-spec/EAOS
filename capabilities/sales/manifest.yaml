@@ -1,0 +1,5 @@
+capability_id: "CAP-SAL-01"
+name: "Sales and Checkout Fulfillment"
+owner: "Solopreneur / Sales Agent"
+bounded_context: "packages/sales"
+version: "1.0.0"

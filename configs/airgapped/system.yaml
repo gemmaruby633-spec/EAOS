@@ -1,0 +1,14 @@
+version: "3.0.0"
+environment: "air_gapped"
+network:
+  internet_access_enabled: false
+  local_domain: "eaos.internal"
+  ssl_enabled: true
+database:
+  provider: "local_postgresql_pgvector"
+  host: "10.0.0.100"
+  port: 5432
+  database_name: "eaos_classified"
+ai_inference:
+  provider: "ollama_local_cluster"
+  endpoint: "http://10.0.0.50:11434/v1"

@@ -1,34 +1,27 @@
-"""Domain entities and value objects for Finance bounded context."""
+"""Finance & FinOps Domain Model for EAOS Capability App."""
 
-from pydantic import BaseModel, ConfigDict
+from datetime import UTC, datetime
 
-
-class FinanceStatusVO(BaseModel):
-    """Value object representing status of finance entity."""
-
-    model_config = ConfigDict(frozen=True)
-
-    status_code: str
-    is_active: bool
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class TokenTransactionVO(BaseModel):
-    """Value object representing FinOps token transaction billing."""
+class FinancialLedgerEntry(BaseModel):
+    """Value object representing a financial transaction."""
 
     model_config = ConfigDict(frozen=True)
 
-    transaction_id: str
-    amount_usd: float
-    tokens_used: int
+    transaction_id: str = Field(..., description="Unique Tx ID")
+    revenue_usd: float = Field(default=0.0)
+    cost_usd: float = Field(default=0.0)
+    net_margin_usd: float = Field(default=0.0)
+    entry_type: str = Field(default="AFFILIATE_PAYOUT")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+    @property
+    def entity_id(self) -> str:
+        """Alias for entity identifier compatibility."""
+        return self.transaction_id
 
 
-class FinanceEntity(BaseModel):
-    """Domain entity representing finance aggregate."""
-
-    entity_id: str
-    name: str
-    status: FinanceStatusVO
-
-
-class BillingAccountEntity(FinanceEntity):
-    """Alias entity representing billing account aggregate."""
+# Alias for legacy infrastructure adapters compatibility
+FinanceEntity = FinancialLedgerEntry

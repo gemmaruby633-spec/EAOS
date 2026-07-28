@@ -1,0 +1,1 @@
+# service Specification: capability.md

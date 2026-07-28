@@ -1,10 +1,12 @@
 """Enterprise Architecture Topology Scanner & Asset Discovery Engine."""
 
 import json
+import logging
 from pathlib import Path
 from typing import ClassVar
-
 from pydantic import BaseModel, ConfigDict
+
+logger = logging.getLogger(__name__)
 
 
 class DirectoryAuditEntryDTO(BaseModel):
@@ -92,7 +94,6 @@ class MonorepoTopologyScanner:
 
     IGNORED_DIRS: ClassVar[set[str]] = {
         ".git",
-        ".github",
         ".venv",
         "venv",
         "__pycache__",
@@ -112,10 +113,14 @@ class MonorepoTopologyScanner:
         """Finds and populates hollow empty directories with __init__.py."""
         cleaned = 0
         for d in self.root_path.rglob("*"):
-            if d.is_dir() and not any(p in self.IGNORED_DIRS for p in d.parts) and not any(d.iterdir()):
-                init_file = d / "__init__.py"
-                init_file.write_text('"""Module initializer."""\n', encoding="utf-8")
-                cleaned += 1
+            try:
+                if d.is_dir() and not any(p in self.IGNORED_DIRS for p in d.parts) and not any(d.iterdir()):
+                    init_file = d / "__init__.py"
+                    init_file.write_text('"""Module initializer."""\n', encoding="utf-8")
+                    cleaned += 1
+            except (PermissionError, FileNotFoundError, OSError) as exc:
+                logger.warning("Skipping locked dir %s: %s", d, exc)
+                continue
         return cleaned
 
     def scan_workspace(self) -> TopologyScanReportDTO:
@@ -133,8 +138,13 @@ class MonorepoTopologyScanner:
             p = self.root_path / canonical
             if p.exists() and p.is_dir():
                 found_canonical += 1
-                files = [f for f in p.rglob("*") if f.is_file()]
-                size = sum(f.stat().st_size for f in files if f.exists())
+                try:
+                    files = [f for f in p.rglob("*") if f.is_file()]
+                    size = sum(f.stat().st_size for f in files if f.exists())
+                except (PermissionError, FileNotFoundError, OSError) as exc:
+                    logger.warning("Error reading canonical dir %s: %s", p, exc)
+                    files, size = [], 0
+
                 details.append(
                     DirectoryAuditEntryDTO(
                         name=canonical,
@@ -157,8 +167,13 @@ class MonorepoTopologyScanner:
         for item in self.root_path.iterdir():
             if item.is_dir() and item.name not in self.CANONICAL_ROOTS and item.name not in self.IGNORED_DIRS:
                 unindexed_count += 1
-                files = [f for f in item.rglob("*") if f.is_file()]
-                size = sum(f.stat().st_size for f in files if f.exists())
+                try:
+                    files = [f for f in item.rglob("*") if f.is_file()]
+                    size = sum(f.stat().st_size for f in files if f.exists())
+                except (PermissionError, FileNotFoundError, OSError) as exc:
+                    logger.warning("Error reading item %s: %s", item, exc)
+                    files, size = [], 0
+
                 details.append(
                     DirectoryAuditEntryDTO(
                         name=item.name,
@@ -170,14 +185,22 @@ class MonorepoTopologyScanner:
 
         total_files = 0
         for f in self.root_path.rglob("*"):
-            if f.is_file() and not any(part in self.IGNORED_DIRS for part in f.parts):
-                total_files += 1
-                ext = f.suffix.lower() or "[no_ext]"
-                ext_matrix[ext] = ext_matrix.get(ext, 0) + 1
+            try:
+                if f.is_file() and not any(part in self.IGNORED_DIRS for part in f.parts):
+                    total_files += 1
+                    ext = f.suffix.lower() or "[no_ext]"
+                    ext_matrix[ext] = ext_matrix.get(ext, 0) + 1
+            except (PermissionError, FileNotFoundError, OSError) as exc:
+                logger.warning("Skipping locked file %s: %s", f, exc)
+                continue
 
         for d in self.root_path.rglob("*"):
-            if d.is_dir() and not any(part in self.IGNORED_DIRS for part in d.parts) and not any(d.iterdir()):
-                empty_dirs += 1
+            try:
+                if d.is_dir() and not any(part in self.IGNORED_DIRS for part in d.parts) and not any(d.iterdir()):
+                    empty_dirs += 1
+            except (PermissionError, FileNotFoundError, OSError) as exc:
+                logger.warning("Skipping empty check for %s: %s", d, exc)
+                continue
 
         report = TopologyScanReportDTO(
             canonical_layers_found=found_canonical,

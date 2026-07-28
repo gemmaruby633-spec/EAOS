@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eaos-api-gateway
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eaos-api-gateway
+  template:
+    metadata:
+      labels:
+        app: eaos-api-gateway
+    spec:
+      containers:
+      - name: eaos-api
+        image: eaos/api-gateway:0.1.0
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10

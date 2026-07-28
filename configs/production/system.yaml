@@ -1,0 +1,12 @@
+version: "3.0.0"
+environment: "production"
+network:
+  public_domain: "api.eaos.ai"
+  ssl_enabled: true
+  cloudflare_tunnel: true
+database:
+  provider: "managed_postgresql_pgvector"
+  host: "db.hetzner.com"
+  port: 5432
+  database_name: "eaos_production"
+  rls_enabled: true

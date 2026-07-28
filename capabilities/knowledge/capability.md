@@ -1,0 +1,1 @@
+# knowledge Specification: capability.md

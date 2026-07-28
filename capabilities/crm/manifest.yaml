@@ -1,0 +1,13 @@
+capability_id: "CAP-CRM-01"
+name: "CRM and Sales Lead Management"
+owner: "Solopreneur / Sales Agent"
+bounded_context: "packages/crm"
+version: "1.0.0"
+processes:
+  - name: "Lead Capture and Funnel Ingestion"
+    automation_level: "Level 3 (Autonomous)"
+  - name: "AI Lead Scoring and Qualification"
+    automation_level: "Level 3 (Autonomous with Guardrails)"
+kpis:
+  lead_capture_conversion_rate: 0.05
+  qualified_lead_threshold_score: 10.0

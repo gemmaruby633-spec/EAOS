@@ -1,23 +1,23 @@
 {
   "canonical_layers_found": 51,
   "canonical_layers_missing": 1,
-  "unindexed_assets_found": 0,
-  "total_files_scanned": 2545,
+  "unindexed_assets_found": 1,
+  "total_files_scanned": 3381,
   "empty_directories_count": 0,
   "extension_matrix": {
     "[no_ext]": 1279,
     ".example": 1,
     ".ini": 1,
-    ".yaml": 35,
-    ".md": 146,
-    ".yml": 11,
-    ".db": 1,
-    ".ps1": 8,
+    ".yaml": 135,
+    ".md": 649,
+    ".yml": 25,
+    ".db": 2,
     ".toml": 34,
+    ".ps1": 8,
     ".txt": 1,
-    ".lock": 1,
-    ".py": 927,
-    ".json": 37,
+    ".lock": 2,
+    ".py": 1135,
+    ".json": 44,
     ".sh": 2,
     ".bak": 10,
     ".go": 1,
@@ -30,6 +30,7 @@
     ".rego": 2,
     ".jsonld": 2,
     ".api": 1,
+    ".prod": 1,
     ".sql": 3,
     ".conf": 5,
     ".tf": 2,
@@ -43,6 +44,7 @@
     ".map": 5,
     ".stat": 1,
     ".meta": 5,
+    ".bin": 1,
     ".graphql": 1,
     ".proto": 3,
     ".jinja": 1
@@ -52,13 +54,13 @@
       "name": ".agents",
       "status": "EXISTS",
       "file_count": 2,
-      "total_size_bytes": 155
+      "total_size_bytes": 161
     },
     {
       "name": ".github",
       "status": "EXISTS",
-      "file_count": 11,
-      "total_size_bytes": 9734
+      "file_count": 21,
+      "total_size_bytes": 25004
     },
     {
       "name": "agents",
@@ -70,13 +72,13 @@
       "name": "ai",
       "status": "EXISTS",
       "file_count": 9,
-      "total_size_bytes": 120
+      "total_size_bytes": 121
     },
     {
       "name": "apps",
       "status": "EXISTS",
-      "file_count": 44,
-      "total_size_bytes": 140406
+      "file_count": 50,
+      "total_size_bytes": 148103
     },
     {
       "name": "architecture",
@@ -88,13 +90,13 @@
       "name": "assets",
       "status": "EXISTS",
       "file_count": 9,
-      "total_size_bytes": 1200
+      "total_size_bytes": 1228
     },
     {
       "name": "capabilities",
       "status": "EXISTS",
-      "file_count": 21,
-      "total_size_bytes": 1798
+      "file_count": 665,
+      "total_size_bytes": 51350
     },
     {
       "name": "catalog",
@@ -105,8 +107,8 @@
     {
       "name": "configs",
       "status": "EXISTS",
-      "file_count": 10,
-      "total_size_bytes": 1039
+      "file_count": 13,
+      "total_size_bytes": 1878
     },
     {
       "name": "contexts",
@@ -118,13 +120,13 @@
       "name": "contracts",
       "status": "EXISTS",
       "file_count": 14,
-      "total_size_bytes": 2190
+      "total_size_bytes": 2287
     },
     {
       "name": "data",
       "status": "EXISTS",
-      "file_count": 1344,
-      "total_size_bytes": 47797139
+      "file_count": 1345,
+      "total_size_bytes": 47797142
     },
     {
       "name": "decision",
@@ -141,8 +143,8 @@
     {
       "name": "docs",
       "status": "EXISTS",
-      "file_count": 23,
-      "total_size_bytes": 543104
+      "file_count": 26,
+      "total_size_bytes": 545479
     },
     {
       "name": "ecosystem",
@@ -153,8 +155,8 @@
     {
       "name": "engine",
       "status": "EXISTS",
-      "file_count": 68,
-      "total_size_bytes": 84351
+      "file_count": 80,
+      "total_size_bytes": 138778
     },
     {
       "name": "evolution",
@@ -183,32 +185,32 @@
     {
       "name": "fitness",
       "status": "EXISTS",
-      "file_count": 45,
-      "total_size_bytes": 31245
+      "file_count": 47,
+      "total_size_bytes": 38252
     },
     {
       "name": "generated",
       "status": "EXISTS",
       "file_count": 79,
-      "total_size_bytes": 172701
+      "total_size_bytes": 183043
     },
     {
       "name": "infra",
       "status": "EXISTS",
-      "file_count": 18,
-      "total_size_bytes": 3457
+      "file_count": 24,
+      "total_size_bytes": 7020
     },
     {
       "name": "kernel",
       "status": "EXISTS",
       "file_count": 56,
-      "total_size_bytes": 102421
+      "total_size_bytes": 102594
     },
     {
       "name": "knowledge",
       "status": "EXISTS",
       "file_count": 47,
-      "total_size_bytes": 7511
+      "total_size_bytes": 7551
     },
     {
       "name": "libs",
@@ -237,8 +239,8 @@
     {
       "name": "operating_model",
       "status": "EXISTS",
-      "file_count": 8,
-      "total_size_bytes": 4243
+      "file_count": 9,
+      "total_size_bytes": 4820
     },
     {
       "name": "operations",
@@ -249,14 +251,14 @@
     {
       "name": "observability",
       "status": "EXISTS",
-      "file_count": 8,
-      "total_size_bytes": 2794
+      "file_count": 20,
+      "total_size_bytes": 7860
     },
     {
       "name": "packages",
       "status": "EXISTS",
-      "file_count": 795,
-      "total_size_bytes": 863828
+      "file_count": 918,
+      "total_size_bytes": 1093004
     },
     {
       "name": "platform",
@@ -273,14 +275,14 @@
     {
       "name": "platform_services",
       "status": "EXISTS",
-      "file_count": 82,
-      "total_size_bytes": 118092
+      "file_count": 88,
+      "total_size_bytes": 131068
     },
     {
       "name": "policies",
       "status": "EXISTS",
       "file_count": 21,
-      "total_size_bytes": 4467
+      "total_size_bytes": 4575
     },
     {
       "name": "portfolio",
@@ -298,31 +300,31 @@
       "name": "rules",
       "status": "EXISTS",
       "file_count": 17,
-      "total_size_bytes": 1146
+      "total_size_bytes": 1186
     },
     {
       "name": "runtime",
       "status": "EXISTS",
       "file_count": 21,
-      "total_size_bytes": 57831
+      "total_size_bytes": 85090
     },
     {
       "name": "schemas",
       "status": "EXISTS",
       "file_count": 17,
-      "total_size_bytes": 2099
+      "total_size_bytes": 2153
     },
     {
       "name": "scripts",
       "status": "EXISTS",
-      "file_count": 7,
-      "total_size_bytes": 7595
+      "file_count": 12,
+      "total_size_bytes": 17659
     },
     {
       "name": "sdk",
       "status": "EXISTS",
-      "file_count": 12,
-      "total_size_bytes": 12784
+      "file_count": 17,
+      "total_size_bytes": 25842
     },
     {
       "name": "security",
@@ -340,25 +342,31 @@
       "name": "specifications",
       "status": "EXISTS",
       "file_count": 23,
-      "total_size_bytes": 2477
+      "total_size_bytes": 2537
     },
     {
       "name": "tests",
       "status": "EXISTS",
-      "file_count": 128,
-      "total_size_bytes": 614196
+      "file_count": 138,
+      "total_size_bytes": 766394
     },
     {
       "name": "tools",
       "status": "EXISTS",
-      "file_count": 149,
-      "total_size_bytes": 271321
+      "file_count": 170,
+      "total_size_bytes": 308411
     },
     {
       "name": "views",
       "status": "EXISTS",
       "file_count": 16,
-      "total_size_bytes": 2058
+      "total_size_bytes": 2098
+    },
+    {
+      "name": "tmp",
+      "status": "DISCOVERED_UNINDEXED",
+      "file_count": 25,
+      "total_size_bytes": 4180
     }
   ]
 }

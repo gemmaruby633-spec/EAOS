@@ -1,6 +1,7 @@
 """AI Pre-Commit Guard verifying code before AI Agents write to disk."""
 
 import ast
+from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,7 +19,7 @@ class GuardEvaluationDTO(BaseModel):
 class AIPreCommitGuard:
     """Guard inspecting AI-generated Python code before disk commit."""
 
-    FORBIDDEN_DOMAIN_IMPORTS: set[str] = {
+    FORBIDDEN_DOMAIN_IMPORTS: ClassVar[set[str]] = {
         "fastapi",
         "sqlalchemy",
         "openai",

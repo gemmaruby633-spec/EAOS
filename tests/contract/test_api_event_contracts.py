@@ -4,7 +4,7 @@ from pathlib import Path
 
 from platform_services.contracts.contract_registry import ContractRegistry
 
-ROOT_PATH = Path(__file__).resolve().parent.parent.parent
+ROOT_PATH = Path(__file__).resolve().parents[2]
 
 
 def test_contract_schemas_are_valid() -> None:

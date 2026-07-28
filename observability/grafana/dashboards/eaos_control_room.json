@@ -1,0 +1,54 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "EAOS Architectural Health Score",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "eaos_health_score",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Active Business Capabilities",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "eaos_active_capabilities_count",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Gateway Process Uptime (Seconds)",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "eaos_process_uptime_seconds",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["eaos", "governance"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "EAOS Cybernetic Control Room Dashboard",
+  "uid": "eaos-control-room"
+}

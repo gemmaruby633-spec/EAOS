@@ -1,62 +1,28 @@
-from pathlib import Path
-from typing import Any
+"""Infrastructure adapters for capability registry storage."""
 
-import yaml  # type: ignore[import-untyped]
-
-from packages.capability.domain.models import (
-    BusinessCapability,
-    CapabilityContract,
-    CapabilityMetadata,
-)
+from packages.capability.domain.models import BusinessCapability
 from packages.capability.domain.ports import CapabilityRegistryPort
 
 
 class InMemoryCapabilityRegistry(CapabilityRegistryPort):
-    """Adapter lÆ°u trá»¯ vÃ  giáº£i mÃ£ tá»‡p tin cáº¥u hÃ¬nh YAML NÄƒng lá»±c doanh nghiá»‡p."""
+    """In-memory implementation of CapabilityRegistryPort."""
 
     def __init__(self) -> None:
-        self._store: dict[str, BusinessCapability] = {}
+        self._capabilities: dict[str, BusinessCapability] = {}
 
     def register(self, capability: BusinessCapability) -> BusinessCapability:
-        self._store[capability.id] = capability
+        """Registers a business capability into in-memory store."""
+        self._capabilities[capability.id.lower()] = capability
         return capability
 
-    def find_by_id(self, cap_id: str) -> BusinessCapability | None:
-        return self._store.get(cap_id)
+    def find_by_id(self, capability_id: str) -> BusinessCapability | None:
+        """Finds business capability by ID."""
+        return self._capabilities.get(capability_id.lower())
+
+    def exists(self, capability_id: str) -> bool:
+        """Checks if capability exists in memory."""
+        return capability_id.lower() in self._capabilities
 
     def list_all(self) -> list[BusinessCapability]:
-        return list(self._store.values())
-
-    def load_from_yaml(self, file_path: Path) -> BusinessCapability:
-        """Äá»c quÃ©t tá»‡p tin YAML vÃ  biÃªn dá»‹ch thÃ nh mÃ´ hÃ¬nh thá»±c thi."""
-        if not file_path.exists():
-            raise FileNotFoundError(f"KhÃ´ng tÃ¬m tháº¥y tá»‡p cáº¥u hÃ¬nh: {file_path}")
-
-        content = file_path.read_text(encoding="utf-8")
-        data: dict[str, Any] = yaml.safe_load(content)
-
-        meta_data = CapabilityMetadata(
-            owner=data.get("owner", "Architecture Council"),
-            status=data.get("status", "active"),
-            description=data.get("description", ""),
-        )
-
-        contracts = [
-            CapabilityContract(
-                id=c.get("id", "api"),
-                type=c.get("type", "REST"),
-                definition_path=c.get("definition_path", ""),
-            )
-            for c in data.get("contracts", [])
-        ]
-
-        return BusinessCapability(
-            id=data.get("id", "capability.unknown"),
-            name=data.get("name", "Unknown"),
-            version=data.get("version", "1.0.0"),
-            metadata=meta_data,
-            dependencies=data.get("dependencies", []),
-            policies=data.get("policies", []),
-            contracts=contracts,
-            events=data.get("events", []),
-        )
+        """Lists all registered business capabilities."""
+        return list(self._capabilities.values())

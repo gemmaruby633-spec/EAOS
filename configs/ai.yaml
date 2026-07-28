@@ -1,0 +1,9 @@
+ai:
+  primary_provider: "ollama"
+  endpoint: "http://localhost:11434"
+  default_model: "llama3"
+  timeouts:
+    connect: 5.0
+    read: 120.0
+    write: 30.0
+    pool: 5.0

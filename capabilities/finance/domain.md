@@ -1,0 +1,1 @@
+# finance Specification: domain.md
