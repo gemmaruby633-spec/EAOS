@@ -1,4 +1,4 @@
-﻿name: Docker Build & Registry Publish
+﻿name: EAOS Docker Build & Publish
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-and-push:
-    name: Build Docker Image
+    name: Build & Push API Image
     runs-on: ubuntu-latest
 
     steps:
