@@ -11,4 +11,4 @@ runtime/backups/*
 generated/architecture/time_machine/*
 data/
 runtime/
-
+.pytest_tmp/
