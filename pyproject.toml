@@ -3,7 +3,7 @@ name = "eaos-monorepo"
 version = "0.1.0"
 description = "Enterprise Architecture Operating System - Root Orchestrator"
 readme = "README.md"
-requires-python = ">=3.14, <3.15"
+requires-python = ">=3.14"
 license = { text = "Proprietary" }
 authors = [
     { name = "EAOS Engineering Team", email = "arch@eaos.internal" }
@@ -43,8 +43,6 @@ dependencies = [
     "eaos-intelligence",
     "eaos-civilization",
     "eaos-platforms",
-    "eaos-designs",
-    "eaos-locales",
     "eaos-platform",
     "eaos-kernel",
     "eaos-engine",
@@ -78,23 +76,9 @@ workspace = { members = [
     "apps/*",
     "packages/*",
     "platforms",
-    "designs",
-    "locales",
     "kernel",
     "engine",
-    "tools",
-    "capabilities",
-    "governances",
-    "federations",
-    "observabilitys",
-    "securitys",
-    "agents",
-    "ai",
-    "runtime",
-    "schemas",
-    "sdk",
-    "validation",
-    "services"
+    "tools"
 ] }
 
 [dependency-groups]
@@ -106,7 +90,8 @@ dev = [
     "mypy>=1.8.0",
     "taskipy>=1.12.0",
     "httpx>=0.28.1",
-    "types-pyyaml>=6.0.12.20260724"
+    "types-pyyaml>=6.0.12.20260724",
+    "types-bcrypt>=4.0.0.3"
 ]
 
 [tool.ruff]
@@ -115,16 +100,23 @@ line-length = 120
 fix = true
 show-fixes = true
 output-format = "concise"
-src = [
-    "apps", "packages", "kernel", "engine", "tools", "platforms", 
-    "capabilities", "governances", "federations", "observabilitys", 
-    "securitys", "agents", "ai", "runtime", "schemas", "sdk", 
-    "validation", "services", "designs", "locales"
-]
+src = ["apps", "packages", "kernel", "engine", "tools", "platforms"]
 exclude = [
-    ".venv", "venvss", "build", "dist", "generated", ".git", 
-    "venv", ".ruff_cache", ".pytest_cache", ".pytest_tmp", 
-    ".mypy_cache", "runtime/tmp", ".vscode", ".github", ".agents"
+    ".venv",
+    "venvss",
+    "build",
+    "dist",
+    "generated",
+    ".git",
+    "venv",
+    ".ruff_cache",
+    ".pytest_cache",
+    ".pytest_tmp",
+    ".mypy_cache",
+    "runtime/tmp",
+    ".vscode",
+    ".github",
+    ".agents"
 ]
 
 [tool.ruff.lint]
@@ -172,8 +164,7 @@ exclude = [
     "^\\.venv/",
     "^\\.pytest_cache/",
     "^\\.mypy_cache/",
-    "^generated/",
-    "main\\.py$"
+    "^generated/"
 ]
 
 [tool.taskipy.tasks]
@@ -181,7 +172,7 @@ doctor = "python -m tools.doctor.main"
 validate = "python -m apps.cli.main validate"
 server = "python -m uvicorn apps.api.app.main:app --host 0.0.0.0 --port 8000"
 run = "python -m kernel.runtime.main"
-lint = "python -m ruff check --fix --unsafe-fixes . && python -m mypy apps/ kernel/ engine/ packages/ tools/ platforms/ capabilities/ governances/ federations/ observabilitys/ securitys/"
+lint = "python -m ruff check --fix --unsafe-fixes . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/ platforms/"
 format = "python -m ruff format ."
 test = "python -m pytest tests/"
 clean = "python -c \"import shutil, pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('.pytest_cache') if p.is_dir()]; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('.pytest_tmp') if p.is_dir()]\""
@@ -221,8 +212,6 @@ eaos-marketplace = { workspace = true }
 eaos-intelligence = { workspace = true }
 eaos-civilization = { workspace = true }
 eaos-platforms = { workspace = true }
-eaos-designs = { workspace = true }
-eaos-locales = { workspace = true }
 eaos-platform = { workspace = true }
 eaos-kernel = { workspace = true }
 eaos-engine = { workspace = true }
@@ -230,11 +219,7 @@ eaos-tools = { workspace = true }
 eaos-l2l-bus = { workspace = true }
 
 [tool.pytest.ini_options]
-pythonpath = [
-    ".", "packages", "apps", "platforms", "capabilities", 
-    "tools", "kernel", "engine", "governances", "federations", 
-    "observabilitys", "securitys", "agents", "ai", "runtime"
-]
+pythonpath = [".", "packages", "apps", "platforms"]
 addopts = "-ra -q --tb=short --basetemp=runtime/tmp -p no:warnings"
 testpaths = ["tests", "fitness"]
 tmp_path_retention_count = 1
