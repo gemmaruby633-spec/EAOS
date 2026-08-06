@@ -9,3 +9,6 @@ __pycache__/
 *.db
 runtime/backups/*
 generated/architecture/time_machine/*
+data/
+runtime/
+
