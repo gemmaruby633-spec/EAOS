@@ -1,8 +1,12 @@
-from pydantic import BaseModel
+"""Memory Application DTOs."""
+
+from pydantic import BaseModel, ConfigDict
 
 
 class StoreMemoryCommand(BaseModel):
-    """DTO Ä‘áº§u vÃ o (Input) Ä‘á»ƒ thá»±c thi Use Case ghi nhá»›."""
+    """Command payload for storing memory."""
+
+    model_config = ConfigDict(frozen=True)
 
     decision_id: str
     outcome: str
@@ -12,8 +16,11 @@ class StoreMemoryCommand(BaseModel):
 
 
 class MemoryResponse(BaseModel):
-    """DTO Ä‘áº§u ra (Output) gá»­i vá» cho API Gateway."""
+    """Response payload for memory operations."""
+
+    model_config = ConfigDict(frozen=True)
 
     id: str
     outcome: str
     lesson_learned: str
+    message: str = "Memory record stored successfully"

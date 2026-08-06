@@ -1,1 +1,1 @@
-""
+"""Architectural Migrations Package."""

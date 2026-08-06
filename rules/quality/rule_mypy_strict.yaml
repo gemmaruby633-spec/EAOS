@@ -1,6 +1,4 @@
-rule_id: rule_mypy_strict
-category: quality
-enabled: true
-description: "Zero MyPy strict typing errors"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-QUAL-001"
+name: "MyPy Strict Type Safety Policy"
+category: "QUALITY"
+min_typed_percentage: 100.0

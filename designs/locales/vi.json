@@ -1,0 +1,9 @@
+{
+  "system": {
+    "title": "Hệ điều hành EAOS",
+    "welcome": "Xin chào {name}"
+  },
+  "auth": {
+    "login": "Đăng nhập"
+  }
+}

@@ -1,7 +1,7 @@
 """Unit test suite for EAOS platform services."""
 
-from platform_services.cache.redis_rate_limiter import RedisDistributedRateLimiter
-from platform_services.database.circuit_breaker_pool import DatabaseCircuitBreakerPool
+from platforms.cache.redis_rate_limiter import RedisDistributedRateLimiter
+from platforms.database.circuit_breaker_pool import DatabaseCircuitBreakerPool
 
 
 def test_distributed_cache_adapter() -> None:

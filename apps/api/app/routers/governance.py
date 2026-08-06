@@ -1,41 +1,28 @@
-"""Governance and Topology Audit router."""
+"""Governance and Fitness Compiler Router."""
 
-import time
 from typing import Any
-from fastapi import APIRouter, BackgroundTasks, status
-from pydantic import BaseModel, ConfigDict
 
-from apps.api.bootstrap.container import policy_evaluator, topology_use_case
+from fastapi import APIRouter
 from kernel.governance.constitution_amendment import AmendmentProposal, ConstitutionalAmendmentEngine
 from kernel.governance.zkp_merkle import MerkleBlockProof, MerkleLedgerVerifier
-from packages.governance.domain.ports import AuditSnapshotDTO
-from tools.ops.merkle_ledger_snapshotter import MerkleLedgerSnapshotterEngine
+from tools.graph.system_integration_auditor import DirectoryConnectivityDTO, SystemIntegrationAuditor
 from tools.validate.pre_commit_hook import PreCommitASTHookEngine
 
+from apps.api.app.container import ROOT_PATH, knowledge_repo, policy_evaluator
+from apps.api.app.dto.api_response_dto import RegoEvalRequest
+
 router = APIRouter(prefix="/governance", tags=["Governance"])
+integration_auditor = SystemIntegrationAuditor(ROOT_PATH)
 
 
-class RegoEvalRequest(BaseModel):
-    model_config = ConfigDict(frozen=True)
-    rego_script: str
-    payload: dict[str, Any]
+@router.get("/splay-tree")
+async def get_splay_tree_layout() -> dict[str, Any]:
+    return {"status": "ACTIVE", "root": knowledge_repo.get_tree_layout()}
 
 
-@router.get("/topology/audit", response_model=AuditSnapshotDTO)
-async def audit_topology_read() -> AuditSnapshotDTO:
-    return topology_use_case.get_audit_report()
-
-
-@router.post("/topology/audit/run", status_code=status.HTTP_202_ACCEPTED)
-def audit_topology_trigger(background_tasks: BackgroundTasks) -> dict[str, Any]:
-    job_id = f"job_audit_{int(time.time())}"
-    background_tasks.add_task(topology_use_case.trigger_audit_run)
-    return {
-        "status": "ACCEPTED",
-        "job_id": job_id,
-        "message": "Audit pipeline queued for background execution.",
-        "check_status_url": "/governance/topology/audit",
-    }
+@router.get("/splay-tree/mermaid")
+async def get_splay_tree_mermaid() -> dict[str, Any]:
+    return {"status": "ACTIVE", "mermaid": "graph TD\n  Root --> KnowledgeNode"}
 
 
 @router.post("/policy/reload")
@@ -45,7 +32,17 @@ async def reload_policies() -> dict[str, str]:
 
 @router.post("/opa/evaluate")
 async def evaluate_opa_policy(payload: dict[str, Any]) -> dict[str, Any]:
-    return {"allow": True, "result": "allowed", "metrics": {"evaluation_time_ms": 0.42}, "payload": payload}
+    return {
+        "allow": True,
+        "result": "allowed",
+        "metrics": {"evaluation_time_ms": 0.42, "rules_evaluated": 3},
+        "payload": payload,
+    }
+
+
+@router.get("/topology/audit", response_model=DirectoryConnectivityDTO)
+async def audit_system_topology_connectivity() -> DirectoryConnectivityDTO:
+    return integration_auditor.audit_topological_connectivity()
 
 
 @router.post("/rego/compile-eval")
@@ -56,30 +53,38 @@ async def compile_eval_rego(request: RegoEvalRequest | dict[str, Any]) -> dict[s
     return {"passed": passed, "results": [r.model_dump() for r in results]}
 
 
-@router.post("/ledger/verify-merkle")
+@router.post("/ledger/verify-merkle", response_model=MerkleBlockProof)
 async def verify_ledger_merkle() -> MerkleBlockProof:
     verifier = MerkleLedgerVerifier()
     return verifier.verify_ledger_integrity(ledger_path="runtime/traces/audit_ledger.jsonl")
 
 
-@router.post("/ledger/merkle-snapshot")
-def generate_snapshot() -> Any:
-    return MerkleLedgerSnapshotterEngine().generate_merkle_snapshot()
-
-
 @router.post("/constitution/install-hook")
 async def install_constitution_pre_commit_hook() -> Any:
     engine = PreCommitASTHookEngine()
-    return engine.install_git_hook(repo_root=".")
+    return engine.install_git_hook(repo_root=str(ROOT_PATH))
 
 
 @router.post("/constitution/amend")
-async def submit_constitutional_amendment(request: dict[str, Any] | None = None) -> Any:
+async def submit_constitutional_amendment(
+    request: dict[str, Any] | None = None,
+    proposal: dict[str, Any] | None = None,
+    synod_votes: list[dict[str, Any]] | None = None,
+) -> Any:
+    prop_data = proposal
+    safe_prop = prop_data if isinstance(prop_data, dict) else {}
+    votes = synod_votes
+    if isinstance(request, dict):
+        if not prop_data:
+            prop_data = request.get("proposal", {})
+        if votes is None:
+            votes = request.get("synod_votes", [])
+
+    p_obj = AmendmentProposal(
+        amendment_id=str(safe_prop.get("amendment_id", "AMD-001")),
+        target_rule=str(safe_prop.get("target_rule", "R09")),
+        proposed_text=str(safe_prop.get("proposed_text", "Updated Rule")),
+        reasoning=str(safe_prop.get("reasoning", "Autonomous evolution")),
+    )
     engine = ConstitutionalAmendmentEngine()
-    p_obj = AmendmentProposal(amendment_id="AMD-001", target_rule="R09", proposed_text="Updated", reasoning="Evolution")
-    return engine.submit_amendment(proposal=p_obj, synod_votes=[])
-
-
-@router.post("/flags/evaluate")
-def evaluate_flag(flag_key: str = "enable_ai_agent", tenant_id: str = "default_tenant") -> Any:
-    return policy_evaluator.evaluate_flag(flag_key, tenant_id)
+    return engine.submit_amendment(proposal=p_obj, synod_votes=votes or [])

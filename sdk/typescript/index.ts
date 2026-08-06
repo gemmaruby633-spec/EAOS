@@ -1,31 +1,11 @@
-/**
- * EAOS TypeScript Client SDK.
- */
+export class EaosClient {
+  private endpoint: string;
 
-export interface EAOSClientConfig {
-  gatewayUrl: string;
-  authToken?: string;
-  timeoutMs?: number;
-}
-
-export interface HealthResponse {
-  status: string;
-  version: string;
-  governance: string;
-}
-
-export class EAOSClient {
-  private config: EAOSClientConfig;
-
-  constructor(config?: EAOSClientConfig) {
-    this.config = config || { gatewayUrl: "http://127.0.0.1:8000" };
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
   }
 
-  async getHealth(): Promise<HealthResponse> {
-    return {
-      status: "healthy",
-      version: "0.1.0",
-      governance: "ARCHITECTURE_CONSTITUTION.md v2.0"
-    };
+  async ping(): Promise<string> {
+    return Pong from EAOS TS SDK at ;
   }
 }

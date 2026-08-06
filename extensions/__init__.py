@@ -1,1 +1,1 @@
-"""EXTENSIONS EAOS layer package."""
+"""EAOS Extensions Package."""

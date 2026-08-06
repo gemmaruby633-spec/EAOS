@@ -1,0 +1,9 @@
+# EAOS Governance Loop Package
+
+## Overview
+Architecture capability package for Governance Loop.
+
+## Structure
+- `domain/`: Domain entities and value objects
+- `ports/`: Protocol interface boundaries
+- `adapters/`: Infrastructure implementation

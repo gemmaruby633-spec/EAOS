@@ -1,29 +1,37 @@
-"""Data architecture engine managing data pipelines and lineage graphs."""
+"""Master Data Architecture Engine."""
 
-from pydantic import BaseModel, ConfigDict
+from __future__ import annotations
+
+from pydantic import BaseModel, ConfigDict, Field
+
+from data.governance.data_governance import DataGovernanceEngine
+from data.lineage.data_lineage import DataLineageEngine
+from data.quality.data_quality import DataQualityAuditor
 
 
-class DataLineageNodeDTO(BaseModel):
-    """Value object representing a node in the data lineage graph."""
+class DataArchitectureSummaryDTO(BaseModel):
+    """Summary DTO for enterprise data architecture."""
 
     model_config = ConfigDict(frozen=True)
 
-    node_id: str
-    source: str
-    target: str
-    quality_score: float
+    governance_active: bool = Field(default=True)
+    lineage_tracked: bool = Field(default=True)
+    quality_passed: bool = Field(default=True)
 
 
-class DataArchitectureEngine:
-    """Engine tracking data models, quality gates, and lineage graphs."""
+class EAOSDataArchitectureEngine:
+    """Master Engine orchestrating Governance, Lineage, and Quality."""
 
-    def audit_data_lineage(self) -> list[DataLineageNodeDTO]:
-        """Audits data pipelines for lineage and quality compliance."""
-        return [
-            DataLineageNodeDTO(
-                node_id="lineage_001",
-                source="runtime/traces/audit_ledger.jsonl",
-                target="data/postgres/eaos_core",
-                quality_score=100.0,
-            )
-        ]
+    def __init__(self) -> None:
+        self.governance = DataGovernanceEngine()
+        self.lineage = DataLineageEngine()
+        self.quality = DataQualityAuditor()
+
+    def get_architecture_summary(self) -> DataArchitectureSummaryDTO:
+        """Return data architecture operational status."""
+        q_report = self.quality.audit_dataset("global_lake")
+        return DataArchitectureSummaryDTO(
+            governance_active=True,
+            lineage_tracked=True,
+            quality_passed=q_report.passed,
+        )

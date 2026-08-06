@@ -1,6 +1,4 @@
-rule_id: rule_order_value_min
-category: business
-enabled: true
-description: "Minimum order transaction threshold"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-BIZ-001"
+name: "Minimum Order Value Policy"
+category: "BUSINESS"
+min_order_value: 100.0

@@ -1,6 +1,4 @@
-rule_id: rule_hexagonal_isolation
-category: architecture
-enabled: true
-description: "Domain framework leakage prohibition"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-ARCH-001"
+name: "Hexagonal Domain Isolation Policy"
+category: "ARCHITECTURE"
+allow_external_imports_in_domain: false

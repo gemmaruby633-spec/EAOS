@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from pydantic import BaseModel, ConfigDict
+
 from packages.frameworks.domain.models import EAFrameworkType
 from packages.frameworks.domain.registry import (
     FrameworkConceptVO,
@@ -9,7 +11,6 @@ from packages.frameworks.domain.registry import (
     GraphEdgeVO,
     GraphNodeVO,
 )
-from pydantic import BaseModel, ConfigDict
 
 
 class CrossFrameworkMappingDTO(BaseModel):
@@ -126,7 +127,7 @@ class ExecutableEAPlatformEngine:
         return len(self.edges)
 
     def query_graph_rag(self, query_text: str) -> RAGQueryResultDTO:
-        """Sprint 5: Queries Knowledge Graph + Framework Registry for AI."""
+        """Sprint 5: Queries Knowledge Graph + Framework Registry for ai."""
         return RAGQueryResultDTO(
             query=query_text,
             answer_summary=(f"Retrieved architecture evidence for '{query_text}'."),

@@ -22,12 +22,13 @@ services:
     container_name: eaos-redis
     ports:
       - "6380:6379"
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
-
+      
   minio:
     image: minio/minio:latest
     container_name: eaos-minio
@@ -38,12 +39,22 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD-SHELL","curl -f http://localhost:9000/minio/health/live || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   qdrant:
     image: qdrant/qdrant:latest
     container_name: eaos-qdrant
     ports:
       - "6333:6333"
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage
 
   neo4j:
     image: neo4j:5-community
@@ -53,6 +64,15 @@ services:
     ports:
       - "7474:7474"
       - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7474/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   ollama:
     image: ollama/ollama:latest
@@ -77,8 +97,10 @@ services:
     container_name: eaos-prometheus
     volumes:
       - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     ports:
       - "9090:9090"
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
@@ -91,7 +113,15 @@ services:
       - ./observability/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./observability/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards/files
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
 
 volumes:
+  qdrant_data:
   pgdata:
   ollama_data:
+  neo4j_data:
+  neo4j_logs:
+  minio_data:
+  prometheus_data:
+  grafana_data:

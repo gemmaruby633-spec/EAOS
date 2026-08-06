@@ -1,48 +1,33 @@
-"""EAOS Embedded In-Process Library Engine (Zero-Server Mode)."""
+"""SDK embedded engine module."""
 
-from pathlib import Path
+from __future__ import annotations
 
-from packages.self_hosting.application.disaster_recovery import (
-    ZeroServerDisasterRecoveryEngine,
-)
-from pydantic import BaseModel, ConfigDict
+from dataclasses import dataclass
+from typing import Any
 
 
-class EmbeddedExecutionResultDTO(BaseModel):
-    """Value object representing in-process embedded library result."""
+@dataclass
+class EmbeddedResultDTO:
+    """Embedded result DTO."""
 
-    model_config = ConfigDict(frozen=True)
-
-    status: str
-    capability_id: str
-    execution_time_ms: float
     in_process: bool = True
+    domain: str = ""
+    action: str = ""
 
 
 class EAOSEmbeddedEngine:
-    """Embedded Library Engine running 100% in-process without servers."""
+    """EAOS Embedded engine."""
 
-    def __init__(self, root_path: Path | str = ".") -> None:
-        self.root_path = Path(root_path).resolve()
-        self._recovery = ZeroServerDisasterRecoveryEngine(self.root_path)
+    def __init__(self, config: Any = None) -> None:
+        self.config = config
 
-    def execute_in_process(self, capability_id: str, action: str) -> EmbeddedExecutionResultDTO:
-        """Executes capability action in-process with zero network overhead."""
-        import time
+    def initialize(self) -> bool:
+        """Initialize embedded engine."""
+        return True
 
-        start = time.perf_counter()
-        elapsed = (time.perf_counter() - start) * 1000.0
-
-        return EmbeddedExecutionResultDTO(
-            status="SUCCESS",
-            capability_id=capability_id,
-            execution_time_ms=round(elapsed, 3),
-            in_process=True,
-        )
+    def execute_in_process(self, domain: str = "", action: str = "") -> EmbeddedResultDTO:
+        """Execute action in process."""
+        return EmbeddedResultDTO(in_process=True, domain=domain, action=action)
 
 
-if __name__ == "__main__":
-    engine = EAOSEmbeddedEngine()
-    res = engine.execute_in_process("marketing", "research")
-    print(f"✔ Embedded Engine Execution: {res.status}")
-    print(f"✔ Latency: {res.execution_time_ms} ms (Zero Server)")
+EmbeddedEngine = EAOSEmbeddedEngine

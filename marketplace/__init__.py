@@ -1,1 +1,1 @@
-"""MARKETPLACE EAOS layer package."""
+"""EAOS Marketplace Package."""

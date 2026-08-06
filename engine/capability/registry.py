@@ -2,6 +2,7 @@
 
 import logging
 from typing import Any, Protocol, overload
+
 from packages.capability.domain.models import (
     BusinessCapability,
     CapabilityMetadata,

@@ -1,45 +1,34 @@
-"""Tester AI Agent worker for automated test suite generation."""
+"""Autonomous Tester Agent Worker."""
 
-import time
+from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+import subprocess
+from pathlib import Path
 
-
-class TestExecutionSummaryDTO(BaseModel):
-    """Value object for test execution metrics."""
-
-    model_config = ConfigDict(frozen=True)
-
-    total_tests: int
-    passed_tests: int
-    failed_tests: int
+from agents.base import AgentRole, AgentWorkResult
 
 
-class TesterReport(BaseModel):
-    """Value object for tester agent execution report."""
+class TesterWorker:
+    """Worker executing Pytest test suite and collecting evidence."""
 
-    model_config = ConfigDict(frozen=True)
+    role = AgentRole.TESTER
 
-    test_run_id: str
-    success: bool
-    summary: TestExecutionSummaryDTO
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
 
-
-class TesterAgentWorker:
-    """AI Agent writing and executing automated pytest test cases."""
-
-    def run_test_suite(
-        self,
-        suite_name: str,
-    ) -> TesterReport:
-        """Simulates automated test execution and coverage check."""
-        summary = TestExecutionSummaryDTO(
-            total_tests=92,
-            passed_tests=92,
-            failed_tests=0,
+    async def execute_work(self) -> AgentWorkResult:
+        res = subprocess.run(
+            ["uv", "run", "task", "test", "-o", "basetemp=runtime/tmp"],
+            cwd=str(self.root),
+            capture_output=True,
+            text=True,
         )
-        return TesterReport(
-            test_run_id=f"test_{int(time.time())}",
-            success=True,
+        success = res.returncode == 0
+        summary = "Pytest Suite Verified 100% Passed." if success else "Pytest execution FAILED."
+
+        return AgentWorkResult(
+            agent_role=self.role,
+            success=success,
             summary=summary,
+            details={"exit_code": res.returncode},
         )

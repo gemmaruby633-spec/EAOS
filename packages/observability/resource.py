@@ -1,6 +1,6 @@
 """OpenTelemetry resource attributes factory for EAOS."""
 
-from opentelemetry.sdk.resources import Resource  # type: ignore[import-not-found]
+from opentelemetry.sdk.resources import Resource
 
 
 def create_eaos_resource(

@@ -1,1 +1,1 @@
-""
+"""Marketing Bounded Context Package."""

@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from platform_services.contracts.contract_registry import ContractRegistry
+from platforms.contracts.contract_registry import ContractRegistry
 
 ROOT_PATH = Path(__file__).resolve().parents[2]
 

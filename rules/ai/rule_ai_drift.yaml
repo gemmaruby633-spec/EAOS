@@ -1,6 +1,5 @@
-rule_id: rule_ai_drift
-category: ai
-enabled: true
-description: "Model drift threshold max 0.2"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-AI-001"
+name: "AI Drift Threshold Policy"
+category: "AI_GOVERNANCE"
+max_drift_rate: 0.05
+action_on_violation: "TRIGGER_RETRAINING"

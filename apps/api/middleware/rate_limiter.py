@@ -1,65 +1,40 @@
-"""Token Bucket rate limiting middleware for sensitive admin endpoints."""
+"""Token Bucket Rate Limiter for API Security."""
 
-import asyncio
 import time
-from typing import ClassVar
-
-from pydantic import BaseModel, ConfigDict
+from dataclasses import dataclass
 
 
-class RateLimitCheck(BaseModel):
-    """Value object representing the result of a rate limit check."""
+@dataclass
+class RateLimitResult:
+    """Rate limit evaluation result."""
 
-    model_config = ConfigDict(frozen=True)
-
-    client_ip: str
     allowed: bool
     remaining_tokens: float
 
 
 class TokenBucketRateLimiter:
-    """Thread-safe Token Bucket rate limiter preventing DoS attacks."""
+    """In-memory Token Bucket Rate Limiter per IP address."""
 
-    _buckets: ClassVar[dict[str, dict[str, float]]] = {}
+    def __init__(self, capacity: float = 10.0, refill_rate: float = 1.0) -> None:
+        self.capacity = capacity
+        self.refill_rate = refill_rate
+        self.buckets: dict[str, float] = {}
+        self.last_update: dict[str, float] = {}
 
-    def __init__(
-        self,
-        capacity: int = 10,
-        refill_rate: float = 1.0,
-    ) -> None:
-        self.capacity: float = float(capacity)
-        self.refill_rate: float = refill_rate
-        self._lock = asyncio.Lock()
+    async def allow_request(self, ip_address: str) -> RateLimitResult:
+        """Evaluates whether an IP address is allowed to proceed."""
+        now = time.time()
+        last = self.last_update.get(ip_address, now)
+        elapsed = now - last
 
-    async def allow_request(self, client_ip: str) -> RateLimitCheck:
-        """Evaluates token bucket capacity with async lock protection."""
-        async with self._lock:
-            now = time.monotonic()
+        current_tokens = self.buckets.get(ip_address, self.capacity)
+        current_tokens = min(self.capacity, current_tokens + elapsed * self.refill_rate)
 
-            if client_ip not in self._buckets:
-                self._buckets[client_ip] = {
-                    "tokens": self.capacity,
-                    "last_refill": now,
-                }
+        self.last_update[ip_address] = now
 
-            bucket = self._buckets[client_ip]
-            elapsed = now - bucket["last_refill"]
-            bucket["tokens"] = min(
-                self.capacity,
-                bucket["tokens"] + elapsed * self.refill_rate,
-            )
-            bucket["last_refill"] = now
+        if current_tokens >= 1.0:
+            self.buckets[ip_address] = current_tokens - 1.0
+            return RateLimitResult(allowed=True, remaining_tokens=self.buckets[ip_address])
 
-            if bucket["tokens"] >= 1.0:
-                bucket["tokens"] -= 1.0
-                return RateLimitCheck(
-                    client_ip=client_ip,
-                    allowed=True,
-                    remaining_tokens=round(bucket["tokens"], 2),
-                )
-
-            return RateLimitCheck(
-                client_ip=client_ip,
-                allowed=False,
-                remaining_tokens=round(bucket["tokens"], 2),
-            )
+        self.buckets[ip_address] = current_tokens
+        return RateLimitResult(allowed=False, remaining_tokens=current_tokens)

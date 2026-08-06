@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eaos-specifications"
+version = "3.0.0"
+description = "Centennial Executable Specifications Engine for EAOS"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.ruff]
+line-length = 79
+target-version = "py314"
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+ignore_missing_imports = true

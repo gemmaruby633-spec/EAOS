@@ -1,1 +1,1 @@
-""
+"""CRM Bounded Context Package."""

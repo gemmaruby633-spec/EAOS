@@ -1,0 +1,28 @@
+{
+  "language_code": "ja",
+  "language_name": "日本語",
+  "system": {
+    "title": "EAOS エンタープライズアーキテクチャ オペレーティングシステム",
+    "welcome": "ようこそ {name}",
+    "status_active": "システムアクティブ (Zero-Ops)",
+    "status_offline": "システムオフライン"
+  },
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "register": "アカウント登録",
+    "unauthorized": "アクセス権限がありません"
+  },
+  "control_room": {
+    "title": "サイバネティックコントロールルーム",
+    "delegate_task": "AIエージェントにタスクを委託",
+    "goal_placeholder": "タスク目標の詳細を入力...",
+    "autonomy_level": "自律レベル",
+    "hitl_approval_required": "人間の承認が必要です (HITL Gatekeeper)",
+    "approve": "承認",
+    "reject": "却下"
+  },
+  "custom": {
+    "health_ok": "システムヘルス 100/100"
+  }
+}

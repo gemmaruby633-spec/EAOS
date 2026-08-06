@@ -1,10 +1,11 @@
 """Sprint 7 Engine: AI Enterprise Architect Reasoning Engine."""
 
+from pydantic import BaseModel, ConfigDict
+
 from packages.frameworks.domain.framework_registry import (
     FrameworkRegistry,
 )
 from packages.frameworks.domain.rule_toolkit import RuleToolkitEngine
-from pydantic import BaseModel, ConfigDict
 
 
 class ArchitecturalDesignProposalDTO(BaseModel):

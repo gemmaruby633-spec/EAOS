@@ -1,13 +1,17 @@
-"""Lifespan context manager for FastAPI application startup/shutdown."""
+"""API Application Lifespan Events Manager."""
 
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+
+import structlog
 from fastapi import FastAPI
+
+logger = structlog.get_logger()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    """Handles application startup and shutdown events."""
-    # Startup hooks
+async def api_app_lifespan(app: FastAPI) -> AsyncGenerator[None]:
+    """Manages API Gateway Application startup and shutdown lifecycles."""
+    logger.info("Initializing EAOS API Gateway...", version=app.version)
     yield
-    # Shutdown hooks
+    logger.info("Shutting down EAOS API Gateway gracefully...")

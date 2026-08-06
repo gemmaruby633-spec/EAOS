@@ -1,19 +1,23 @@
-"""OpenTelemetry SDK lifecycle manager for EAOS."""
+"""Telemetry module for EAOS Observability."""
 
-from opentelemetry import trace  # type: ignore[import-not-found]
-from opentelemetry.sdk.trace import TracerProvider  # type: ignore[import-not-found]
-from opentelemetry.sdk.trace.export import BatchSpanProcessor  # type: ignore[import-not-found]
-from packages.observability.exporters import create_otlp_http_exporter
-from packages.observability.resource import create_eaos_resource
+from __future__ import annotations
+
+from typing import Any
+
+trace: Any = None
+try:
+    import opentelemetry.trace as trace_mod
+
+    trace = trace_mod
+except ImportError:
+    pass
 
 
-def setup_telemetry(
-    service_name: str = "eaos-core",
-    otlp_endpoint: str = "http://localhost:4318/v1/traces",
-) -> None:
-    """Configures global TracerProvider with BatchSpanProcessor and OTLP Exporter."""
-    resource = create_eaos_resource(service_name=service_name)
-    provider = TracerProvider(resource=resource)
-    exporter = create_otlp_http_exporter(endpoint=otlp_endpoint)
-    provider.add_span_processor(BatchSpanProcessor(exporter))
-    trace.set_tracer_provider(provider)
+class TelemetryEngine:
+    """Telemetry engine wrapper."""
+
+    def get_tracer(self) -> Any:
+        """Get tracer instance."""
+        if trace is not None and hasattr(trace, "get_tracer"):
+            return trace.get_tracer("eaos")
+        return None

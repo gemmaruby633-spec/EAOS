@@ -1,97 +1,96 @@
 services:
-  postgres:
+  eaos-postgres:
     image: pgvector/pgvector:pg16
     container_name: eaos-postgres
+    restart: always
     environment:
       POSTGRES_DB: eaos
       POSTGRES_USER: eaos
-      POSTGRES_PASSWORD: eaos
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-eaos_secure_pass_2026}
     ports:
       - "5433:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./infra/postgres/migrations:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U eaos -d eaos"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - postgres_data:/var/lib/postgresql/data
 
-  redis:
+  eaos-redis:
     image: redis:7-alpine
     container_name: eaos-redis
+    restart: always
     ports:
       - "6380:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    volumes:
+      - redis_data:/data
 
-  minio:
-    image: minio/minio:latest
-    container_name: eaos-minio
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: eaos
-      MINIO_ROOT_PASSWORD: eaos_minio_secret
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-
-  qdrant:
-    image: qdrant/qdrant:latest
-    container_name: eaos-qdrant
-    ports:
-      - "6333:6333"
-
-  neo4j:
+  eaos-neo4j:
     image: neo4j:5-community
     container_name: eaos-neo4j
+    restart: always
     environment:
-      NEO4J_AUTH: neo4j/eaos_secret_pass
+      NEO4J_AUTH: neo4j/password
     ports:
       - "7474:7474"
       - "7687:7687"
+    volumes:
+      - neo4j_data:/data
 
-  ollama:
+  eaos-minio:
+    image: minio/minio
+    container_name: eaos-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  eaos-qdrant:
+    image: qdrant/qdrant:latest
+    container_name: eaos-qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  eaos-ollama:
     image: ollama/ollama:latest
     container_name: eaos-ollama
+    restart: always
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
 
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    container_name: eaos-otel
-    command: ["--config=/etc/otel/config.yaml"]
-    volumes:
-      - ./observability/otel/config.yaml:/etc/otel/config.yaml
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-
-  prometheus:
+  eaos-prometheus:
     image: prom/prometheus:latest
     container_name: eaos-prometheus
-    volumes:
-      - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    restart: always
     ports:
       - "9090:9090"
+    volumes:
+      - prometheus_data:/etc/prometheus
 
-  grafana:
+  eaos-grafana:
     image: grafana/grafana:latest
     container_name: eaos-grafana
+    restart: always
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
     ports:
       - "3000:3000"
     volumes:
-      - ./observability/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./observability/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards/files
+      - grafana_data:/var/lib/grafana
 
 volumes:
-  pgdata:
+  postgres_data:
+  redis_data:
+  neo4j_data:
+  minio_data:
+  qdrant_data:
   ollama_data:
+  prometheus_data:
+  grafana_data:

@@ -1,44 +1,37 @@
-"""Coder AI Agent worker for automated code synthesis."""
+"""Autonomous Coder Agent Worker."""
 
-import time
+from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from pathlib import Path
 
+from packages.solution_architecture.adapters.unified_patch_adapter import (
+    UnifiedPatchAdapter,
+)
 
-class GeneratedCodePatchDTO(BaseModel):
-    """Value object for generated code patches."""
-
-    model_config = ConfigDict(frozen=True)
-
-    target_file: str
-    patch_code: str
+from agents.base import AgentRole, AgentWorkResult
 
 
-class CoderResult(BaseModel):
-    """Value object for coder agent execution outcomes."""
+class CoderWorker:
+    """Worker generating code artifacts and applying patches."""
 
-    model_config = ConfigDict(frozen=True)
+    role = AgentRole.CODER
 
-    job_id: str
-    success: bool
-    patch: GeneratedCodePatchDTO
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
+        self.patch_adapter = UnifiedPatchAdapter(workspace_root=self.root)
 
-
-class CoderAgentWorker:
-    """AI Agent generating strongly-typed, Hexagonal Python code."""
-
-    def generate_patch(
-        self,
-        target_file: str,
-        specification: str,
-    ) -> CoderResult:
-        """Synthesizes Python code conforming to specification."""
-        patch = GeneratedCodePatchDTO(
-            target_file=target_file,
-            patch_code=f"# Auto-generated for: {specification[:40]}",
+    async def execute_work(self, target_file: str, content: str) -> AgentWorkResult:
+        res = await self.patch_adapter.apply_patch(target_file, content)
+        summary = (
+            f"Patch applied to {target_file} (backup saved)." if res.success else f"Patch failed: {res.error_message}"
         )
-        return CoderResult(
-            job_id=f"code_{int(time.time())}",
-            success=True,
-            patch=patch,
+
+        return AgentWorkResult(
+            agent_role=self.role,
+            success=res.success,
+            summary=summary,
+            details={
+                "target_file": target_file,
+                "has_backup": res.backup is not None,
+            },
         )

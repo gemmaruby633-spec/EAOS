@@ -1,0 +1,30 @@
+{
+  "language_code": "en",
+  "language_name": "English",
+  "title": "EAOS Enterprise Architecture Operating System",
+  "system_title": "EAOS Enterprise Architecture Operating System",
+  "system": {
+    "title": "EAOS Enterprise Architecture Operating System",
+    "welcome": "Welcome {name}",
+    "status_active": "System Active (Zero-Ops)",
+    "status_offline": "System Offline"
+  },
+  "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
+    "register": "Register Account",
+    "unauthorized": "Unauthorized Access"
+  },
+  "control_room": {
+    "title": "Cybernetic Control Room",
+    "delegate_task": "Delegate Task to AI Agents",
+    "goal_placeholder": "Enter detailed task goal...",
+    "autonomy_level": "Autonomy Level",
+    "hitl_approval_required": "Human Approval Required (HITL Gatekeeper)",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "custom": {
+    "health_ok": "System Health 100/100"
+  }
+}

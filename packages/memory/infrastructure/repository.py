@@ -1,39 +1,48 @@
+"""InMemory Memory Repository implementation."""
+
 from packages.memory.domain.entities import MemoryRecord
-from packages.memory.domain.ports import MemoryRepositoryPort
 
 
-class InMemoryMemoryRepository(MemoryRepositoryPort):
+class InMemoryMemoryRepository:
+    """In-memory implementation of memory repository matching MemoryRepositoryPort."""
+
     def __init__(self) -> None:
-        self._store: dict[str, MemoryRecord] = {}
+        self._storage: dict[str, MemoryRecord] = {}
 
-    def save(self, record: MemoryRecord) -> MemoryRecord:
-        self._store[record.id] = record
-        return record
+    def save(self, memory: MemoryRecord) -> MemoryRecord:
+        """Saves a memory record matching protocol parameter name."""
+        rec_id = getattr(memory, "memory_id", getattr(memory, "id", "default_id"))
+        self._storage[rec_id] = memory
+        return memory
+
+    def get_by_id(self, memory_id: str) -> MemoryRecord | None:
+        """Retrieves a memory record by ID."""
+        return self._storage.get(memory_id)
 
     def find_by_id(self, memory_id: str) -> MemoryRecord | None:
-        return self._store.get(memory_id)
+        """Retrieves a memory record by ID for Protocol compatibility."""
+        return self._storage.get(memory_id)
 
     def list_all(self) -> list[MemoryRecord]:
-        return list(self._store.values())
+        """Returns all stored memory records."""
+        return list(self._storage.values())
 
-    def vector_search(self, query: str, limit: int = 5) -> list[MemoryRecord]:
-        query_tokens = query.lower().split()
-        results = []
-        for record in self._store.values():
-            text_space = (f"{record.lesson_learned} {record.evidence_summary} {' '.join(record.key_learnings)}").lower()
-            overlap = sum(1 for t in query_tokens if t in text_space)
-            if overlap > 0:
-                results.append((overlap, record))
-        results.sort(key=lambda x: x[0], reverse=True)
-        return [r[1] for r in results[:limit]]
-
-    def query_memories(self, keyword: str) -> list[MemoryRecord]:
-        k = keyword.lower()
-        results = []
-        for record in self._store.values():
-            in_lesson = k in record.lesson_learned.lower()
-            in_evidence = k in record.evidence_summary.lower()
-            in_keys = any(k in kl.lower() for kl in record.key_learnings)
-            if in_lesson or in_evidence or in_keys:
+    def search(
+        self,
+        query: str = "",
+        limit: int = 10,
+        user_id: str = "",
+    ) -> list[MemoryRecord]:
+        """Search memory records matching query string."""
+        results: list[MemoryRecord] = []
+        q = query.lower()
+        for record in self._storage.values():
+            if (
+                not q
+                or q in record.lesson_learned.lower()
+                or q in record.evidence_summary.lower()
+            ):
                 results.append(record)
+            if len(results) >= limit:
+                break
         return results

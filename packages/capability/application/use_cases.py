@@ -1,4 +1,5 @@
 from typing import cast
+
 from pydantic import BaseModel
 
 from packages.capability.domain.models import BusinessCapability

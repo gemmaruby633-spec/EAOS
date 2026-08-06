@@ -1,40 +1,45 @@
-"""Distributed Federation and Consensus router."""
+"""Federation and Synod Consensus Router."""
 
 from typing import Annotated, Any
+
 from fastapi import APIRouter, Body
-from pydantic import BaseModel, ConfigDict
 from kernel.federation.raft import RaftConsensusNode
 from kernel.federation.synod_protocol import BFTSynodProtocolEngine, SynodProposal, SynodQuorumResult
 from packages.federation.domain.models import EcosystemMember
-from packages.federation.infrastructure.adapters import InMemoryFederationRegistry
+
+from apps.api.app.container import federation_registry
+from apps.api.app.dto.api_response_dto import RaftProposeRequest
 
 router = APIRouter(prefix="/federation", tags=["Federation"])
-federation_registry = InMemoryFederationRegistry()
-
-
-class RaftProposeRequest(BaseModel):
-    model_config = ConfigDict(frozen=True)
-    node_id: str
-    transaction_id: str
 
 
 @router.get("/members", response_model=list[EcosystemMember])
-async def list_federation_members() -> list[EcosystemMember]:
+@router.get("/v1/members", response_model=list[EcosystemMember])
+async def v1_list_federation_members() -> list[EcosystemMember]:
     return federation_registry.list_members()
 
 
 @router.post("/crdt/sync-delta")
-async def sync_crdt_delta(request: dict[str, Any] | None = None) -> dict[str, Any]:
-    from kernel.federation.cross_region_sync import CRDTStateSyncEngine
+async def sync_crdt_delta(
+    request: dict[str, Any] | None = None,
+    delta: Annotated[dict[str, Any] | None, Body(embed=True)] = None,
+) -> dict[str, Any]:
+    d_data = delta
+    if isinstance(request, dict) and not d_data:
+        d_data = request.get("delta", {})
 
+    from kernel.federation.cross_region_sync import CRDTStateSyncEngine
     engine = CRDTStateSyncEngine(node_id="node_us_east_1", region="us-east-1")
-    return engine.merge_delta({})
+    return engine.merge_delta(d_data or {})
 
 
 @router.post("/raft/propose")
 async def propose_raft_consensus(request: RaftProposeRequest | dict[str, Any]) -> dict[str, Any]:
-    node = RaftConsensusNode(node_id="node_1", cluster_nodes=["node_2", "node_3"])
-    return node.propose_consensus(transaction_id="tx_001")
+    node_id = str(request.get("node_id", "node_1")) if isinstance(request, dict) else request.node_id
+    tx_id = str(request.get("transaction_id", "tx_001")) if isinstance(request, dict) else request.transaction_id
+
+    node = RaftConsensusNode(node_id=node_id, cluster_nodes=["node_2", "node_3"])
+    return node.propose_consensus(transaction_id=tx_id)
 
 
 @router.post("/synod/vote-bft")

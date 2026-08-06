@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from platform_services.config.environment_config import (
+from platforms.config.environment_config import (
     EnvironmentConfigLoader,
     SystemEnvironment,
 )

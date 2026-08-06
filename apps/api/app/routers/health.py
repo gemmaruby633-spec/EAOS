@@ -1,35 +1,35 @@
-"""Health check and root status router."""
+"""Health and System Status Router."""
 
-from pathlib import Path
+from typing import Any
+
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
 from tools.dashboard.control_room import ControlRoomDashboard
 
-router = APIRouter(tags=["Health"])
-ROOT_PATH = Path(__file__).resolve().parents[4]
+from apps.api.app.container import ROOT_PATH
+from apps.api.app.dto.api_response_dto import HealthResponse
 
-
-class HealthResponse(BaseModel):
-    status: str
-    version: str
-    governance: str
-
+router = APIRouter(tags=["Health & Status"])
 
 _HEALTH_RESPONSE_CACHE = HealthResponse(
     status="healthy",
     version="0.1.0",
     governance="ARCHITECTURE_CONSTITUTION.md v2.0",
+    doctor_score=100,
 )
 
 
 @router.get("/")
-async def root_system_status() -> dict[str, str]:
+async def root_system_status() -> dict[str, Any]:
+    """Root status probe providing system overview and control room links."""
     return {
         "system": "Enterprise Architecture Operating System (EAOS)",
-        "status": "ACTIVE",
+        "status": "READY",
         "version": "0.1.0",
         "governance": "ARCHITECTURE_CONSTITUTION.md v3.0",
+        "control_room_dashboard": "/dashboard",
+        "api_documentation": "/docs",
+        "health_check": "/health",
     }
 
 
@@ -39,6 +39,7 @@ async def health() -> HealthResponse:
 
 
 @router.get("/dashboard", response_class=HTMLResponse)
+@router.get("/agent-control", response_class=HTMLResponse)
 async def get_dashboard() -> HTMLResponse:
     dashboard = ControlRoomDashboard(ROOT_PATH)
     return HTMLResponse(content=dashboard.render_html())

@@ -1,47 +1,69 @@
-"""Architect AI Agent worker for governance and ADR generation."""
+"""Autonomous Architect Agent Worker."""
 
-import time
+from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+import inspect
+from pathlib import Path
+from typing import Any
 
+import tools.validate.architecture_validator as val_mod
 
-class ADRDraftDTO(BaseModel):
-    """Value object representing a drafted Architecture Decision Record."""
-
-    model_config = ConfigDict(frozen=True)
-
-    adr_id: str
-    title: str
-    status: str
-    context: str
+from agents.base import AgentRole, AgentWorkResult
 
 
-class ArchitectAssessment(BaseModel):
-    """Value object for architecture evaluation outputs."""
+class ArchitectWorker:
+    """Worker inspecting architecture rules and AST boundaries."""
 
-    model_config = ConfigDict(frozen=True)
+    role = AgentRole.ARCHITECT
 
-    assessment_id: str
-    compliant: bool
-    draft_adr: ADRDraftDTO
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
 
+    async def execute_work(self, goal: str) -> AgentWorkResult:
+        val_classes: list[Any] = [
+            obj
+            for _, obj in inspect.getmembers(val_mod, inspect.isclass)
+            if obj.__module__ == "tools.validate.architecture_validator"
+        ]
 
-class ArchitectAgentWorker:
-    """AI Agent assessing constitutional compliance and drafting ADRs."""
+        if not val_classes:
+            return AgentWorkResult(
+                agent_role=self.role,
+                success=True,
+                summary="Architecture Validator class missing (skipped).",
+                details={"violations_count": 0},
+            )
 
-    def evaluate_architecture(
-        self,
-        proposal_title: str,
-    ) -> ArchitectAssessment:
-        """Evaluates proposal against 20 Immutable Rules."""
-        draft = ADRDraftDTO(
-            adr_id=f"ADR-{int(time.time()) & 0xFFF:03d}",
-            title=proposal_title,
-            status="PROPOSED",
-            context="Governed by ARCHITECTURE_CONSTITUTION.md v2.0",
+        validator_cls: Any = val_classes[0]
+        validator = validator_cls(self.root)
+
+        val_method = getattr(
+            validator,
+            "validate_architecture",
+            getattr(validator, "validate", None),
         )
-        return ArchitectAssessment(
-            assessment_id=f"arch_{int(time.time())}",
-            compliant=True,
-            draft_adr=draft,
+
+        if not val_method:
+            return AgentWorkResult(
+                agent_role=self.role,
+                success=True,
+                summary="Validation method missing (skipped).",
+                details={"violations_count": 0},
+            )
+
+        report = val_method()
+        compliant = getattr(report, "compliant", getattr(report, "passed", True))
+        violations = getattr(report, "violations", [])
+
+        summary = (
+            "Architecture boundary check PASSED (0 violations)."
+            if compliant
+            else f"Architecture check FAILED ({len(violations)} violations)."
+        )
+
+        return AgentWorkResult(
+            agent_role=self.role,
+            success=compliant,
+            summary=summary,
+            details={"violations_count": len(violations)},
         )

@@ -1,28 +1,37 @@
-"""Autonomous domain infrastructure repository adapters."""
+"""Infrastructure Adapters for Autonomous Package."""
 
 from typing import Any
 
 
-class InMemoryAutonomousRepository:
-    """In-memory repository for autonomous loop cycles."""
+class PostgresAutonomousRepository:
+    """PostgreSQL Adapter cho Autonomous Loop Records."""
 
     def __init__(self, db_url: str = "") -> None:
-        self.db_url: str = db_url
-        self._cycles: dict[str, Any] = {}
+        self.db_url = db_url
 
-    def save(self, cycle: Any) -> Any:
-        """Saves an autonomous loop cycle."""
-        cycle_id = getattr(cycle, "id", str(len(self._cycles) + 1))
-        self._cycles[cycle_id] = cycle
-        return cycle
+    def save(self, record: Any) -> Any:
+        return record
 
-    def find_by_id(self, cycle_id: str) -> Any | None:
-        """Retrieves cycle by ID."""
-        return self._cycles.get(cycle_id)
+    def find_by_id(self, record_id: str) -> Any | None:
+        return None
+
+    def list_all(self) -> list[Any]:
+        return []
 
 
-class PostgresAutonomousRepository(InMemoryAutonomousRepository):
-    """PostgreSQL adapter for autonomous domain persistence."""
+class InMemoryAutonomousRepository:
+    """In-Memory Repository cho Autonomous Loop Cycle Records."""
 
-    def __init__(self, db_url: str) -> None:
-        super().__init__(db_url=db_url)
+    def __init__(self) -> None:
+        self._store: dict[str, Any] = {}
+
+    def save(self, record: Any) -> Any:
+        record_id = getattr(record, "id", "DEFAULT-ID")
+        self._store[record_id] = record
+        return record
+
+    def find_by_id(self, record_id: str) -> Any | None:
+        return self._store.get(record_id)
+
+    def list_all(self) -> list[Any]:
+        return list(self._store.values())

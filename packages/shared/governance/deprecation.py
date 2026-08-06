@@ -1,9 +1,9 @@
 """Deprecation & Sunset Policy Engine for EAOS Governance."""
 
 import warnings
+from collections.abc import Callable
 from functools import wraps
 from typing import Any, TypeVar
-from collections.abc import Callable
 
 F = TypeVar("F", bound=Callable[..., Any])
 

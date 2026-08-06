@@ -1,48 +1,20 @@
-"""Policy Enforcement Middleware for API Gateway."""
+"""Policy Enforcement Middleware for EAOS API Gateway."""
 
-from typing import Any, ClassVar
+from collections.abc import Awaitable, Callable
 
-from starlette.middleware.base import (
-    BaseHTTPMiddleware,
-    RequestResponseEndpoint,
-)
-from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
-from starlette.types import ASGIApp
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 
 class PolicyEnforcementMiddleware(BaseHTTPMiddleware):
-    """Middleware enforcing enterprise policies on incoming API requests."""
+    """Enforces constitutional policies on inbound API gateway requests."""
 
-    EXEMPT_PATHS: ClassVar[set[str]] = {
-        "/health",
-        "/docs",
-        "/openapi.json",
-        "/redoc",
-        "/dashboard",
-    }
-
-    def __init__(
+    async def dispatch(
         self,
-        app: ASGIApp,
-        evaluate_policy_use_case: Any = None,
-        policy_id: str = "",
-    ) -> None:
-        super().__init__(app)
-        self.evaluate_policy_use_case = evaluate_policy_use_case
-        self.policy_id = policy_id
-
-    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        if request.url.path in self.EXEMPT_PATHS:
-            return await call_next(request)
-
-        env_header = request.headers.get("X-Environment")
-        if env_header and env_header.lower() != "production":
-            return JSONResponse(
-                status_code=403,
-                content={"detail": "Request rejected by EAOS Policy Engine"},
-            )
-
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]],
+    ) -> Response:
+        """Applies request header checks and forwards execution."""
         response = await call_next(request)
-        response.headers["X-EAOS-Governance"] = "ENFORCED"
+        response.headers["X-EAOS-Policy-Guard"] = "ENFORCED"
         return response

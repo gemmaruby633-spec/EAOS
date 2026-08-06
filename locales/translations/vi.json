@@ -1,0 +1,30 @@
+{
+  "language_code": "vi",
+  "language_name": "Tiếng Việt",
+  "title": "Hệ điều hành Kiến trúc Doanh nghiệp EAOS",
+  "system_title": "Hệ điều hành Kiến trúc Doanh nghiệp EAOS",
+  "system": {
+    "title": "Hệ điều hành Kiến trúc Doanh nghiệp EAOS",
+    "welcome": "Xin chào {name}",
+    "status_active": "Hệ thống Đang Hoạt động (Zero-Ops)",
+    "status_offline": "Hệ thống Ngoại tuyến"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký tài khoản",
+    "unauthorized": "Chưa được cấp quyền truy cập"
+  },
+  "control_room": {
+    "title": "Phòng Chỉ huy Cybernetic Control Room",
+    "delegate_task": "Giao việc cho AI Agents",
+    "goal_placeholder": "Nhập mục tiêu công việc chi tiết...",
+    "autonomy_level": "Mức độ Tự trị",
+    "hitl_approval_required": "Yêu cầu phê duyệt từ con người (HITL Gatekeeper)",
+    "approve": "Chấp thuận (Approve)",
+    "reject": "Từ chối (Reject)"
+  },
+  "custom": {
+    "health_ok": "Hệ thống khỏe mạnh 100/100"
+  }
+}

@@ -1,6 +1,7 @@
 """Public ports and protocols for Enterprise Capability Packages."""
 
 from typing import Any, Protocol
+
 from packages.capability.domain.models import (
     BusinessCapability,
     CapabilityContext,

@@ -1,18 +1,28 @@
+"""Memory Domain Entities."""
+
 from datetime import UTC, datetime
+from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
 class MemoryRecord(BaseModel):
-    """Thực thể bản ghi bộ nhớ vĩnh cửu trong RAM."""
+    """Memory Record Entity."""
 
-    id: str = Field(..., description="Mã bản ghi")
-    memory_type: str = Field(default="EPISODIC", description="Phân loại bộ nhớ")
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
-    decision_id: str = Field(..., description="Mã quyết định")
-    outcome: str = Field(..., description="Kết quả")
-    evidence_summary: str = Field(..., description="Bằng chứng")
-    lesson_learned: str = Field(..., description="Bài học")
+    model_config = ConfigDict(frozen=True, populate_by_name=True)
+
+    memory_id: str = Field(default_factory=lambda: f"MEM-{uuid4().hex[:8]}")
+    id: str | None = None
+    decision_id: str = "PR-01"
+    outcome: str = "SUCCESS"
+    evidence_summary: str = ""
+    lesson_learned: str = ""
     key_learnings: list[str] = Field(default_factory=list)
+    timestamp: str | datetime | None = Field(
+        default_factory=lambda: datetime.now(UTC).isoformat()
+    )
 
-    model_config = ConfigDict(frozen=True)
+    @property
+    def record_id(self) -> str:
+        """Alias for memory_id for backward compatibility."""
+        return self.id or self.memory_id

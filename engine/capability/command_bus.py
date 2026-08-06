@@ -1,11 +1,13 @@
 """Enterprise Command Bus routing commands to Capability Pipeline."""
 
 import logging
-from engine.capability.pipeline import CapabilityPipelineExecutor
+
 from packages.capability.domain.models import (
     CapabilityExecutionResultDTO,
     EnterpriseCommandDTO,
 )
+
+from engine.capability.pipeline import CapabilityPipelineExecutor
 
 logger = logging.getLogger(__name__)
 

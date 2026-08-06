@@ -3,7 +3,7 @@
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body
-from platform_services.telemetry.otlp_exporter import (
+from platforms.telemetry.otlp_exporter import (
     OpenTelemetryOTLPExporter,
     OTLPSpanExportDTO,
 )
@@ -62,7 +62,7 @@ async def evaluate_telemetry_fitness_bridge(
     if isinstance(request, dict) and not metrics:
         metrics = request.get("trace_metrics", {})
 
-    from platform_services.telemetry.telemetry_fitness import (
+    from platforms.telemetry.telemetry_fitness import (
         TelemetryFitnessBridge,
     )
 

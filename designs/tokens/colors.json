@@ -1,0 +1,9 @@
+{
+  "primary": { "hex": "#06b6d4", "description": "Cyan 500 - Màu thương hiệu chính" },
+  "background": { "hex": "#0f172a", "description": "Slate 900 - Nền tối hệ thống" },
+  "surface": { "hex": "#1e293b", "description": "Slate 800 - Nền thẻ component" },
+  "textMain": { "hex": "#f8fafc", "description": "Slate 50 - Chữ chính" },
+  "textMuted": { "hex": "#94a3b8", "description": "Slate 400 - Chữ phụ" },
+  "danger": { "hex": "#ef4444", "description": "Red 500 - Cảnh báo lỗi" },
+  "success": { "hex": "#10b981", "description": "Emerald 500 - Trạng thái thành công" }
+}

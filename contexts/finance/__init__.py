@@ -1,1 +1,1 @@
-""
+"""Finance Bounded Context Package."""

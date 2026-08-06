@@ -1,6 +1,7 @@
 """Ports defining abstract interfaces for AI LLM Providers."""
 
 from typing import Protocol
+
 from packages.ai_gateway.domain.models import LLMRequestDTO, LLMResponseDTO
 
 

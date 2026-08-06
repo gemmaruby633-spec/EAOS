@@ -1,1 +1,1 @@
-"""META EAOS layer package."""
+"""EAOS Meta Package."""

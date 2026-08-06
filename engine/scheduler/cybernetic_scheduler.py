@@ -46,3 +46,7 @@ class CyberneticLoopScheduler:
             active_jobs=len(self._jobs),
             status="SCHEDULER_RUNNING",
         )
+
+
+class CyberneticScheduler:
+    pass

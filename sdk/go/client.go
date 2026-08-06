@@ -1,33 +1,18 @@
-// Package eaos provides the official Go SDK client for EAOS API Gateway.
-package eaos
+package eaos_sdk
 
-type ClientConfig struct {
-GatewayURL string
-AuthToken  string
+import (
+    "context"
+    "fmt"
+)
+
+type Client struct {
+    Endpoint string
 }
 
-type EAOSClient struct {
-Config ClientConfig
+func NewClient(endpoint string) *Client {
+    return &Client{Endpoint: endpoint}
 }
 
-type HealthResponse struct {
-Status     string json:"status"
-Version    string json:"version"
-Governance string json:"governance"
-}
-
-func NewClient(gatewayURL string) *EAOSClient {
-return &EAOSClient{
-Config: ClientConfig{
-GatewayURL: gatewayURL,
-},
-}
-}
-
-func (c *EAOSClient) GetHealth() (*HealthResponse, error) {
-return &HealthResponse{
-Status:     "healthy",
-Version:    "0.1.0",
-Governance: "ARCHITECTURE_CONSTITUTION.md v2.0",
-}, nil
+func (c *Client) Ping(ctx context.Context) (string, error) {
+    return fmt.Sprintf("Pong from EAOS Go SDK at %s", c.Endpoint), nil
 }

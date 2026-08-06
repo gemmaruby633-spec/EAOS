@@ -24,7 +24,7 @@ class GraphEdgeVO(BaseModel):
 
 
 class EAKnowledgeGraphEngine(BaseModel):
-    """Knowledge Graph Engine executing graph traversals for AI."""
+    """Knowledge Graph Engine executing graph traversals for ai."""
 
     model_config = ConfigDict(frozen=True)
 

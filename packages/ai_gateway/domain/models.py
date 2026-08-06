@@ -1,6 +1,7 @@
 """AI Gateway Domain Models and Exceptions for EAOS."""
 
 from datetime import UTC, datetime
+
 from pydantic import BaseModel, ConfigDict, Field
 
 

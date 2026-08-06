@@ -67,4 +67,4 @@ class PreCommitASTHookEngine:
 
         engine = EAOSValidatorEngine(Path(repo_root).resolve())
         report = engine.run_validation()
-        return report.overall_passed
+        return bool(report.overall_passed)

@@ -1,13 +1,3 @@
-from .models import (
-    EnterpriseSpecification,
-    EvaluatePayloadResult,
-    SpecField,
-    SpecRule,
-)
+"""An safe, zero-side-effect package initialization file."""
 
-__all__ = [
-    "EnterpriseSpecification",
-    "EvaluatePayloadResult",
-    "SpecField",
-    "SpecRule",
-]
+__all__: list[str] = []

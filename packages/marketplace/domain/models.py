@@ -12,7 +12,8 @@ class MarketplaceAsset(BaseModel):
     version: str = Field(default="1.0.0", description="PhiÃªn báº£n ngá»¯ nghÄ©a")
     dependencies: list[str] = Field(default_factory=list, description="MÃ£ cÃ¡c NÄƒng lá»±c phá»¥ thuá»™c")
     compatibility_matrix: list[str] = Field(
-        default_factory=list, description="Danh sÃ¡ch phiÃªn báº£n EAOS Ä‘Æ°á»£c há»— trá»£"
+        default_factory=list,
+        description="Danh sÃ¡ch phiÃªn báº£n EAOS Ä‘Æ°á»£c há»— trá»£",
     )
     pricing: float = Field(default=0.0, description="GiÃ¡ dá»‹ch vá»¥ tÃ­nh theo Token")
     license_type: str = Field(default="MIT", description="Máº«u Giáº¥y phÃ©p")

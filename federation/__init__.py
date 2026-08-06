@@ -1,1 +1,0 @@
-"""FEDERATION EAOS layer package."""

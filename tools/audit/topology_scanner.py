@@ -4,6 +4,7 @@ import json
 import logging
 from pathlib import Path
 from typing import ClassVar
+
 from pydantic import BaseModel, ConfigDict
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class MonorepoTopologyScanner:
         "packages",
         "platform",
         "platform_layer",
-        "platform_services",
+        "platforms",
         "policies",
         "portfolio",
         "products",

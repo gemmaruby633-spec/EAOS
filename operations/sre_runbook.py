@@ -1,32 +1,50 @@
-"""Operational SRE runbook engine and incident response manager."""
+"""Master SRE and Operations Orchestrator Engine."""
 
-from pydantic import BaseModel, ConfigDict
+from __future__ import annotations
+
+from pathlib import Path
+
+from pydantic import BaseModel, ConfigDict, Field
+
+from operations.finops.finops_cost_tracker import (
+    FinOpsCostTrackerEngine,
+)
+from operations.incident.incident_response import (
+    IncidentResponseEngine,
+)
+from operations.runbooks.runbook_executor import (
+    ExecutableRunbookEngine,
+)
+from operations.sre.sre_engine import SREEngine
 
 
-class RunbookTaskDTO(BaseModel):
-    """Value object representing an SRE operational runbook task."""
+class OperationsSummaryDTO(BaseModel):
+    """Summary DTO for overall SRE operations health."""
 
     model_config = ConfigDict(frozen=True)
 
-    task_id: str
-    command: str
-    target_service: str
+    sre_availability_score: float = Field(default=100.0)
+    active_incidents_count: int = Field(default=0)
+    runbook_execution_status: str = Field(default="READY")
 
 
-class OperationalRunbookEngine:
-    """Engine executing operational runbooks, SRE tasks, and FinOps actions."""
+class EAOSOperationsEngine:
+    """Master Orchestrator for SRE, Incidents, FinOps, & Runbooks."""
 
-    def get_active_runbooks(self) -> list[RunbookTaskDTO]:
-        """Returns list of automated operational SRE runbooks."""
-        return [
-            RunbookTaskDTO(
-                task_id="SRE-RUNBOOK-01",
-                command="uv run task loop EXECUTION",
-                target_service="EAOS Gateway",
-            ),
-            RunbookTaskDTO(
-                task_id="SRE-RUNBOOK-02",
-                command="uv run task time_machine record prod_checkpoint",
-                target_service="Time Machine",
-            ),
-        ]
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
+        self.sre = SREEngine()
+        self.incident = IncidentResponseEngine()
+        self.finops = FinOpsCostTrackerEngine()
+        self.runbooks = ExecutableRunbookEngine(self.root)
+
+    def get_operations_summary(self) -> OperationsSummaryDTO:
+        """Generate master SRE operations summary."""
+        sre_metric = self.sre.calculate_sre_health()
+        rb_result = self.runbooks.execute_backup_runbook()
+
+        return OperationsSummaryDTO(
+            sre_availability_score=sre_metric.availability_score,
+            active_incidents_count=0,
+            runbook_execution_status=rb_result.status,
+        )

@@ -1,26 +1,86 @@
-﻿services:
-  eaos-postgres:
+version: '3.8'
+
+services:
+  eaos-postgres-prod:
     image: pgvector/pgvector:pg16
     container_name: eaos-postgres-prod
     restart: always
     environment:
-      POSTGRES_DB: eaos_db
+      POSTGRES_DB: eaos
       POSTGRES_USER: eaos
       POSTGRES_PASSWORD: ${DB_PASSWORD:-eaos_secure_pass_2026}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eaos -d eaos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  eaos-redis:
+  eaos-redis-prod:
     image: redis:7-alpine
     container_name: eaos-redis-prod
     restart: always
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_prod_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  eaos-neo4j-prod:
+    image: neo4j:5-community
+    container_name: eaos-neo4j-prod
+    restart: always
+    environment:
+      NEO4J_AUTH: neo4j/password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_prod_data:/data
+
+  eaos-minio-prod:
+    image: minio/minio
+    container_name: eaos-minio-prod
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_prod_data:/data
+
+  eaos-qdrant-prod:
+    image: qdrant/qdrant:latest
+    container_name: eaos-qdrant-prod
+    restart: always
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_prod_data:/qdrant/storage
+
+  eaos-ollama-prod:
+    image: ollama/ollama:latest
+    container_name: eaos-ollama-prod
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_prod_data:/root/.ollama
 
 volumes:
   postgres_prod_data:
   redis_prod_data:
+  neo4j_prod_data:
+  minio_prod_data:
+  qdrant_prod_data:
+  ollama_prod_data:

@@ -1,10 +1,10 @@
 """Unit test suite verifying all 5 security sub-domains."""
 
-from security.audit.zk_attestation import ZKAttestationProofEngine
-from security.compliance.zero_trust_auditor import ZeroTrustAuditorEngine
-from security.cryptography.post_quantum_keys import PostQuantumKeyManager
-from security.identity.iam_policy import IAMPolicyEngine
-from security.threats.threat_detector import ThreatDetectorEngine
+from securitys.audit.zk_attestation import ZKAttestationProofEngine
+from securitys.compliance.zero_trust_auditor import ZeroTrustAuditorEngine
+from securitys.cryptography.post_quantum_keys import PostQuantumKeyManager
+from securitys.identity.iam_policy import IAMPolicyEngine
+from securitys.threats.threat_detector import ThreatDetectorEngine
 
 
 def test_iam_policy_engine_rbac() -> None:

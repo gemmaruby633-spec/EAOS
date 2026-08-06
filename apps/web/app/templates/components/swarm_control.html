@@ -1,0 +1,27 @@
+<div class="p-5 bg-slate-900 border border-slate-800 rounded-lg space-y-4">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h2 class="text-sm font-bold text-indigo-400">Autonomous Swarm & Self-Rewrite Engine</h2>
+        <button onclick="runSwarmCycle()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold rounded text-white transition-colors">
+            Run Autonomous Cycle
+        </button>
+    </div>
+    <div id="swarm-output" class="p-3 bg-slate-950 font-mono text-xs text-emerald-400 rounded border border-slate-800 h-48 overflow-y-auto">
+        [SWARM] Autonomous orchestrator standing by. Click 'Run Autonomous Cycle' to trigger real loop execution.
+    </div>
+</div>
+
+<script>
+    async function runSwarmCycle() {
+        const out = document.getElementById('swarm-output');
+        out.innerHTML += `<p class="text-cyan-400">> Triggering real autonomous loop & chaos engine...</p>`;
+        try {
+            const res = await fetch(`${API_BASE}/dashboard/autonomous-swarm/run`, { method: 'POST' });
+            const data = await res.json();
+            out.innerHTML += `<p class="text-emerald-300">[SUCCESS] ${data.message}</p>`;
+            out.innerHTML += `<p class="text-slate-400">[DETAILS] Scanned capabilities: ${data.capabilities_scanned}</p>`;
+        } catch (err) {
+            out.innerHTML += `<p class="text-rose-400">[ERROR] Autonomous cycle failed.</p>`;
+        }
+        out.scrollTop = out.scrollHeight;
+    }
+</script>

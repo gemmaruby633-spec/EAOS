@@ -27,7 +27,7 @@ class ProjectBootstrapTool:
             "apps",
             "packages",
             "kernel",
-            "platform_services",
+            "platforms",
             "engine",
             "tools",
             "tests",

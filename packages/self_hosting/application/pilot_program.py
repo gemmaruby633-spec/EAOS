@@ -4,10 +4,11 @@ import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 
+from pydantic import BaseModel, ConfigDict, Field
+
 from packages.frameworks.application.architecture_validator import (
     ExecutableArchitectureValidator,
 )
-from pydantic import BaseModel, ConfigDict, Field
 
 
 class RealPilotEvidenceReportDTO(BaseModel):

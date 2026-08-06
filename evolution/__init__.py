@@ -1,1 +1,1 @@
-"""EVOLUTION EAOS layer package."""
+"""EAOS Evolution Package."""

@@ -1,6 +1,7 @@
 """Application Use Cases for Governance capability."""
 
 from typing import Any
+
 from packages.governance.application.topology_use_case import (
     GovernanceAuditOrchestrator,
     TopologyAuditUseCase,

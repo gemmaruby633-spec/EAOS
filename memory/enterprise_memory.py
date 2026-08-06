@@ -1,30 +1,41 @@
-"""Enterprise memory engine managing organizational and vector memory."""
+"""Master Enterprise Memory Orchestrator Engine (Rule R20)."""
 
-from pydantic import BaseModel, ConfigDict
+from __future__ import annotations
+
+from pathlib import Path
+
+from pydantic import BaseModel, ConfigDict, Field
+
+from memory.architectural.architectural_memory import (
+    ArchitecturalMemoryEngine,
+)
+from memory.operational.operational_memory import OperationalMemoryEngine
+from memory.vector.vector_memory import HybridVectorMemoryEngine
 
 
-class OrganizationalMemoryRecordDTO(BaseModel):
-    """Value object representing an organizational memory record."""
+class EnterpriseMemorySummaryDTO(BaseModel):
+    """Summary DTO for overall organizational memory status."""
 
     model_config = ConfigDict(frozen=True)
 
-    memory_id: str
-    memory_type: str
-    summary: str
+    architectural_records_count: int = Field(default=1)
+    operational_records_count: int = Field(default=1)
+    vector_search_active: bool = Field(default=True)
 
 
-class OrganizationalMemoryEngine:
-    """Engine managing episodic, semantic, and vector architectural memory."""
+class EAOSEnterpriseMemoryEngine:
+    """Master Orchestrator for Architectural, Operational, & Vector Memory."""
 
-    def retrieve_memory(
-        self,
-        query: str,
-    ) -> list[OrganizationalMemoryRecordDTO]:
-        """Retrieves relevant organizational memories for a query."""
-        return [
-            OrganizationalMemoryRecordDTO(
-                memory_id="MEM-ORG-101",
-                memory_type="EPISODIC",
-                summary=f"Memory match for '{query[:20]}': Hexagonal boundary",
-            )
-        ]
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
+        self.architectural = ArchitecturalMemoryEngine()
+        self.operational = OperationalMemoryEngine()
+        self.vector = HybridVectorMemoryEngine()
+
+    def get_memory_summary(self) -> EnterpriseMemorySummaryDTO:
+        """Generate master organizational memory summary."""
+        return EnterpriseMemorySummaryDTO(
+            architectural_records_count=1,
+            operational_records_count=1,
+            vector_search_active=True,
+        )

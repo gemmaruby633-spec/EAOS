@@ -1,78 +1,97 @@
-"""Domain Ports and Value Objects for Enterprise Governance."""
+"""Domain Ports and DTOs for Governance Package."""
 
+from datetime import UTC, datetime
 from typing import Any, Protocol
-from pydantic import BaseModel, ConfigDict
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ScanDiagnostic(BaseModel):
-    """Diagnostic record for file scan or AST parse warnings/errors."""
+    """Mô tả chẩn đoán quét thành phần."""
+
+    diagnostic_id: str = Field(default="")
+    message: str = Field(default="")
+    severity: str = Field(default="INFO")
+    file_path: str = Field(default="")
 
     model_config = ConfigDict(frozen=True)
-
-    file_path: str
-    severity: str
-    message: str
-
-
-class TopologyScanDTO(BaseModel):
-    """Raw workspace topology scan data containing AST imports and diagnostics."""
-
-    model_config = ConfigDict(frozen=True)
-
-    active_py_files: int
-    empty_directories: int
-    import_records: list[tuple[str, str]]
-    diagnostics: list[ScanDiagnostic]
 
 
 class AuditSnapshotDTO(BaseModel):
-    """Persistent audit snapshot value object with real fitness metrics."""
+    """Mô tả ảnh chụp kiểm toán."""
+
+    snapshot_id: str = Field(default="")
+    status: str = Field(default="COMMITTED")
+    audit_status: str = Field(default="PASSED")
+    active_source_files: int = Field(default=0)
+    empty_directories: int = Field(default=0)
+    architecture_violations: int = Field(default=0)
+    audit_warnings_count: int = Field(default=0)
+    calculated_health_score: float = Field(default=100.0)
+    coupling_index: float = Field(default=0.0)
+    instability_index: float = Field(default=0.0)
+    package_cohesion: float = Field(default=1.0)
+    diagnostics_summary: list[Any] = Field(default_factory=list)
+    timestamp: datetime | float = Field(
+        default_factory=lambda: datetime.now(UTC)
+    )
 
     model_config = ConfigDict(frozen=True)
 
-    canonical_layers_matched: int = 52
-    capability_domains_count: int = 10
-    sub_capability_packages: int = 58
-    active_source_files: int
-    empty_directories: int
-    architecture_violations: int
-    audit_warnings_count: int
-    calculated_health_score: float
-    coupling_index: float = 0.0
-    instability_index: float = 0.0
-    package_cohesion: float = 0.95
-    audit_status: str
-    diagnostics_summary: list[str]
-    all_connected: bool = True
-    isolated_directories_count: int = 0
-    total_root_directories: int = 38
-    constitution_version: str = "v3.0"
-    timestamp: float
+
+class TopologyScanDTO(BaseModel):
+    """Mô tả kết quả quét địa hình kiến trúc."""
+
+    scan_id: str = Field(default="")
+    nodes_count: int = Field(default=0)
+    active_py_files: int = Field(default=0)
+    empty_directories: int = Field(default=0)
+    import_records: list[Any] = Field(default_factory=list)
+    diagnostics: list[ScanDiagnostic] = Field(default_factory=list)
+
+    model_config = ConfigDict(frozen=True)
 
 
 class TopologyScannerPort(Protocol):
-    """Port for scanning workspace filesystem and extracting AST data."""
+    """Port for scanning component topology."""
+
+    def scan_topology(self) -> TopologyScanDTO: ...
 
     def scan_workspace(self) -> TopologyScanDTO: ...
 
 
 class GovernancePolicyProviderPort(Protocol):
-    """Port for loading dynamic governance policies."""
+    """Port for providing governance policies."""
 
-    def load_policy(self) -> dict[str, Any]: ...
+    def get_policies(self) -> list[dict[str, Any]]: ...
+
+    def load_policy(self) -> Any: ...
 
 
 class GovernanceRepositoryPort(Protocol):
-    """Port for persisting snapshots and querying historical trends."""
+    """Port for governance persistence."""
 
     def save_snapshot(self, snapshot: AuditSnapshotDTO) -> None: ...
 
     def get_latest_snapshot(self) -> AuditSnapshotDTO | None: ...
 
-    def get_snapshot_history(self) -> list[AuditSnapshotDTO]: ...
+    def count_records(self) -> int: ...
 
 
 class KnowledgeGraphPort(Protocol):
-    """Port for querying live Knowledge Graph metrics from Neo4j."""
+    """Port for knowledge graph interaction."""
+
+    def query_graph(self, query: str) -> dict[str, Any]: ...
 
     def query_system_node_count(self) -> int: ...
+
+
+__all__ = [
+    "AuditSnapshotDTO",
+    "GovernancePolicyProviderPort",
+    "GovernanceRepositoryPort",
+    "KnowledgeGraphPort",
+    "ScanDiagnostic",
+    "TopologyScanDTO",
+    "TopologyScannerPort",
+]

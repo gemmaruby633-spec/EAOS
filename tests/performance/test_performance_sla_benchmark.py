@@ -150,27 +150,27 @@ from packages.tenancy.infrastructure.tenant_metering import (
     TenantQuotaCheck,
 )
 from packages.workflow.infrastructure.adapters import InMemoryWorkflowRegistry
-from platform_services.resilience.engine import IdempotencyService
-from platform_services.security.cloudflare_waf_driver import (
+from platforms.resilience.engine import IdempotencyService
+from platforms.security.cloudflare_waf_driver import (
     CloudflareWAFDriver,
 )
-from platform_services.security.post_quantum_signer import (
+from platforms.security.post_quantum_signer import (
     PostQuantumSignerEngine,
     ZKAttestationProof,
 )
-from platform_services.security.quantum_envelope import (
+from platforms.security.quantum_envelope import (
     EncryptedEnvelopeDTO,
     QuantumEnvelopeEncryptionEngine,
 )
-from platform_services.security.wazuh_mtls_adapter import (
+from platforms.security.wazuh_mtls_adapter import (
     WazuhMTLSSyslogAdapter,
 )
-from platform_services.telemetry.observability import TelemetryService
-from platform_services.telemetry.otlp_exporter import (
+from platforms.telemetry.observability import TelemetryService
+from platforms.telemetry.otlp_exporter import (
     OpenTelemetryOTLPExporter,
     OTLPSpanExportDTO,
 )
-from platform_services.telemetry.telemetry_fitness import (
+from platforms.telemetry.telemetry_fitness import (
     TelemetryFitnessBridge,
 )
 from pydantic import BaseModel, ConfigDict
@@ -385,7 +385,7 @@ async def v1_store_memory(
 
     cmd = StoreMemoryCommand(
         decision_id=req_data.get("decision_id", "PR-01"),
-        outcome=req_data.get("outcome", "SUCCESS"),
+        outcome=req_data.get("outcome", "success"),
         evidence_summary=req_data.get("evidence_summary", ""),
         lesson_learned=req_data.get("lesson_learned", ""),
         key_learnings=req_data.get("key_learnings", []),
@@ -709,7 +709,7 @@ async def block_cloudflare_ip(
 
 @app.get("/performance/concurrency/metrics")
 async def get_concurrency_metrics() -> dict[str, Any]:
-    from platform_services.performance.async_concurrency import (
+    from platforms.performance.async_concurrency import (
         ConcurrencyTuningEngine,
     )
 
@@ -722,7 +722,7 @@ async def get_concurrency_metrics() -> dict[str, Any]:
 async def batch_evict_splay_cache(
     target_items: Annotated[int, Body(embed=True)] = 1000,
 ) -> dict[str, Any]:
-    from platform_services.performance.async_concurrency import (
+    from platforms.performance.async_concurrency import (
         ConcurrencyTuningEngine,
     )
 
@@ -759,7 +759,7 @@ async def rotate_vault_ephemeral_secret(
         if ttl is None:
             ttl = int(request.get("ttl_sec", 3600))
 
-    from platform_services.security.vault_ephemeral import (
+    from platforms.security.vault_ephemeral import (
         VaultEphemeralSigner,
     )
 

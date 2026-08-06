@@ -69,7 +69,7 @@ async def execute_wasm_sandbox(
 
 @router.get("/performance/concurrency/metrics")
 async def get_concurrency_metrics() -> dict[str, Any]:
-    from platform_services.performance.async_concurrency import (
+    from platforms.performance.async_concurrency import (
         ConcurrencyTuningEngine,
     )
 
@@ -81,7 +81,7 @@ async def get_concurrency_metrics() -> dict[str, Any]:
 async def batch_evict_splay_cache(
     target_items: Annotated[int, Body(embed=True)] = 1000,
 ) -> dict[str, Any]:
-    from platform_services.performance.async_concurrency import (
+    from platforms.performance.async_concurrency import (
         ConcurrencyTuningEngine,
     )
 

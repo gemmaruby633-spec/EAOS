@@ -1,3 +1,3 @@
-module eaos.internal/sdk/go
+module github.com/eaos/sdk/go
 
 go 1.22

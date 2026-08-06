@@ -1,0 +1,49 @@
+<div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-between">
+            <div>
+                <p class="text-xs text-slate-400">Doctor Health Score (Real Engine)</p>
+                <p class="text-3xl font-extrabold text-emerald-400 mt-1" id="fit-health">--</p>
+            </div>
+            <div class="text-3xl text-emerald-400 font-bold">🛡️</div>
+        </div>
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-between">
+            <div>
+                <p class="text-xs text-slate-400">Constitution Compliance</p>
+                <p class="text-3xl font-extrabold text-cyan-400 mt-1">v3.0 Ratified</p>
+            </div>
+            <div class="text-3xl text-cyan-400 font-bold">📜</div>
+        </div>
+    </div>
+
+    <div class="p-5 bg-slate-900 border border-slate-800 rounded-lg space-y-4">
+        <h2 class="text-sm font-bold text-slate-200">Constitutional Invariants & Fitness Evaluation</h2>
+        <div id="fitness-list" class="space-y-2 font-mono text-xs">
+            <p class="text-slate-500">Loading fitness evaluation report...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function fetchFitness() {
+        try {
+            const res = await fetch(`${API_BASE}/dashboard/constitutional-fitness`);
+            const data = await res.json();
+            document.getElementById('fit-health').textContent = `${data.health_score}%`;
+            
+            const list = document.getElementById('fitness-list');
+            list.innerHTML = data.checks.map(c => `
+                <div class="p-3 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <span class="text-cyan-400 font-bold">[${c.rule_id}]</span> <span class="text-slate-200">${c.name}</span>
+                        <p class="text-[11px] text-slate-400 mt-0.5">${c.details}</p>
+                    </div>
+                    <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">${c.status}</span>
+                </div>
+            `).join('');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    fetchFitness();
+</script>

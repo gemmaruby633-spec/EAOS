@@ -1,0 +1,9 @@
+# EAOS Enterprise Doctor Configuration (v2)
+weights:
+  runtime: 0.20
+  architecture: 0.30
+  infrastructure: 0.25
+  governance: 0.15
+  filesystem: 0.10
+
+disabled_checkers: []

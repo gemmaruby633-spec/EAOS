@@ -2,11 +2,11 @@
 
 from pathlib import Path
 
-from security.cryptography.post_quantum_keys import (
+from securitys.cryptography.post_quantum_keys import (
     PostQuantumKeyManager,
 )
-from security.security_engine import EnterpriseSecurityEngine
-from security.threats.threat_detector import ThreatDetectorEngine
+from securitys.security_engine import EnterpriseSecurityEngine
+from securitys.threats.threat_detector import ThreatDetectorEngine
 
 ROOT_PATH = Path(__file__).resolve().parents[3]
 

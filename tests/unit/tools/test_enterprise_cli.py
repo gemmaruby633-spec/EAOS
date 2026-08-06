@@ -1,0 +1,29 @@
+"""Unit tests for Enterprise CLI System (Human API)."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from tools.cli.app import EAOSCLIApp
+from tools.cli.dto import CLIExitCode
+
+
+def test_cli_app_doctor_command(tmp_path: Path) -> None:
+    """Test CLI app running doctor command."""
+    app = EAOSCLIApp()
+    exit_code = app.run(["doctor", "--workspace", str(tmp_path)])
+    assert exit_code in (CLIExitCode.HEALTHY, CLIExitCode.WARNING)
+
+
+def test_cli_app_runtime_command(tmp_path: Path) -> None:
+    """Test CLI app running runtime status command."""
+    app = EAOSCLIApp()
+    exit_code = app.run(["runtime", "--workspace", str(tmp_path)])
+    assert exit_code in (CLIExitCode.HEALTHY, CLIExitCode.INTERNAL_ERROR)
+
+
+def test_cli_app_unknown_command() -> None:
+    """Test CLI app handling unknown command."""
+    app = EAOSCLIApp()
+    exit_code = app.run(["unknown_cmd"])
+    assert exit_code == CLIExitCode.CONFIG_ERROR

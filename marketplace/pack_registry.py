@@ -1,32 +1,47 @@
-"""Enterprise marketplace registry managing capability packs."""
+"""Master Marketplace Pack Registry Engine Orchestrator."""
+
+from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
-ROOT_PATH = Path(__file__).resolve().parents[1]
+from marketplace.agent_pack.agent_pack_installer import (
+    AgentPackInstallerEngine,
+)
+from marketplace.capability_pack.capability_pack_installer import (
+    CapabilityPackInstallerEngine,
+    CapabilityPackManifestDTO,
+)
 
 
-class PackInstallationResult(BaseModel):
-    """Value object representing capability pack installation status."""
+class MarketplaceSummaryDTO(BaseModel):
+    """Summary DTO for marketplace status."""
 
     model_config = ConfigDict(frozen=True)
 
-    pack_name: str
-    installed: bool
-    active_capabilities: list[str]
+    total_capability_packs: int = Field(default=1)
+    total_agent_packs: int = Field(default=1)
+    marketplace_active: bool = Field(default=True)
+    capability_packs: list[CapabilityPackManifestDTO] = Field(default_factory=list)
 
 
-class EnterpriseMarketplaceRegistry:
-    """Registry managing capability packs installation."""
+class EcosystemPackRegistryEngine:
+    """Master Engine orchestrating Capability, Agent, Policy, & Workflows."""
 
-    def __init__(self, root_path: Path | None = None) -> None:
-        self.root_path: Path = root_path or ROOT_PATH
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
+        self.cap_installer = CapabilityPackInstallerEngine()
+        self.agent_installer = AgentPackInstallerEngine()
 
-    def install_pack(self, pack_name: str) -> PackInstallationResult:
-        """Installs and activates a specified capability pack."""
-        return PackInstallationResult(
-            pack_name=pack_name,
-            installed=True,
-            active_capabilities=[f"capability.{pack_name}.core"],
+    def get_marketplace_summary(self) -> MarketplaceSummaryDTO:
+        """Generate master marketplace summary."""
+        cap_packs = self.cap_installer.list_available_capability_packs()
+        agent_packs = self.agent_installer.list_available_agent_packs()
+
+        return MarketplaceSummaryDTO(
+            total_capability_packs=len(cap_packs),
+            total_agent_packs=len(agent_packs),
+            marketplace_active=True,
+            capability_packs=cap_packs,
         )

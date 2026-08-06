@@ -48,5 +48,9 @@ class DigitalTwinOrchestrator:
             "score_delta": score_delta,
             "simulated_violations": simulated_violations,
             "recommendations": recommendations,
-            "proposal_details": {"package_name": proposed_pkg, "layer": proposed_layer, "dependencies": proposed_deps},
+            "proposal_details": {
+                "package_name": proposed_pkg,
+                "layer": proposed_layer,
+                "dependencies": proposed_deps,
+            },
         }

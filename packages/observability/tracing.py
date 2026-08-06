@@ -1,29 +1,35 @@
-"""Business capability tracer for enterprise observability spans."""
+"""Tracing module for EAOS Observability."""
+
+from __future__ import annotations
 
 from typing import Any
-from opentelemetry import trace  # type: ignore[import-not-found]
-from opentelemetry.trace import Status, StatusCode  # type: ignore[import-not-found]
+
+trace: Any = None
+Status: Any = None
+StatusCode: Any = None
+
+try:
+    import opentelemetry.trace as trace_mod
+    from opentelemetry.trace import (
+        Status as Status_cls,
+    )
+    from opentelemetry.trace import (
+        StatusCode as StatusCode_cls,
+    )
+
+    trace = trace_mod
+    Status = Status_cls
+    StatusCode = StatusCode_cls
+except ImportError:
+    pass
 
 
-class BusinessCapabilityTracer:
-    """Traces execution spans tagged with business capability metadata."""
+class TracingEngine:
+    """Tracing engine wrapper."""
 
-    def __init__(self, tracer_name: str = "eaos.capability") -> None:
-        self._tracer = trace.get_tracer(tracer_name)
-
-    def trace_capability_execution(
-        self,
-        capability_id: str,
-        action: str,
-        metadata: dict[str, Any] | None = None,
-    ) -> Any:
-        """Executes action within a capability-attributed tracing span."""
-        span_name = f"Capability:{capability_id}/{action}"
-        with self._tracer.start_as_current_span(span_name) as span:
-            span.set_attribute("enterprise.capability_id", capability_id)
-            span.set_attribute("enterprise.action", action)
-            if metadata:
-                for k, v in metadata.items():
-                    span.set_attribute(f"enterprise.metadata.{k}", str(v))
-            span.set_status(Status(StatusCode.OK))
-            return True
+    def start_span(self, name: str) -> Any:
+        """Start a trace span."""
+        if trace is not None and hasattr(trace, "get_tracer"):
+            tracer = trace.get_tracer("eaos")
+            return tracer.start_span(name)
+        return None

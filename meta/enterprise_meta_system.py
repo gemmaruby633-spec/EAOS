@@ -1,32 +1,44 @@
-"""Enterprise meta-system managing ontologies and taxonomies."""
+"""Master Enterprise Meta-System Orchestrator Engine."""
+
+from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
-ROOT_PATH = Path(__file__).resolve().parents[1]
+from meta.classification.classification_engine import (
+    DataClassificationEngine,
+)
+from meta.metamodel.metamodel_engine import UniversalMetamodelEngine
+from meta.taxonomy.taxonomy_engine import EnterpriseTaxonomyEngine
 
 
-class MetamodelGraphDTO(BaseModel):
-    """Value object representing enterprise metamodel ontology graph."""
+class MetaSystemSummaryDTO(BaseModel):
+    """Summary DTO for enterprise meta-system status."""
 
     model_config = ConfigDict(frozen=True)
 
-    system_name: str
-    entities_count: int
-    triples_count: int
+    meta_entities_count: int = Field(default=1)
+    taxonomies_count: int = Field(default=2)
+    classification_active: bool = Field(default=True)
 
 
-class EnterpriseMetaSystem:
-    """Meta-system auditing enterprise architecture ontologies."""
+class EAOSEnterpriseMetaSystem:
+    """Master Orchestrator for Metamodels, Taxonomies, & Classification."""
 
-    def __init__(self, root_path: Path | None = None) -> None:
-        self.root_path: Path = root_path or ROOT_PATH
+    def __init__(self, workspace_root: Path | None = None) -> None:
+        self.root = (workspace_root or Path.cwd()).resolve()
+        self.metamodel = UniversalMetamodelEngine()
+        self.taxonomy = EnterpriseTaxonomyEngine()
+        self.classification = DataClassificationEngine()
 
-    def get_ontology_graph(self) -> MetamodelGraphDTO:
-        """Retrieves structured ontology graph metadata."""
-        return MetamodelGraphDTO(
-            system_name="EAOS-META-ONTOLOGY",
-            entities_count=38,
-            triples_count=120,
+    def get_meta_system_summary(self) -> MetaSystemSummaryDTO:
+        """Generate summary of enterprise meta-system status."""
+        entities = self.metamodel.get_meta_entities()
+        taxs = self.taxonomy.get_domain_taxonomies()
+
+        return MetaSystemSummaryDTO(
+            meta_entities_count=len(entities),
+            taxonomies_count=len(taxs),
+            classification_active=True,
         )

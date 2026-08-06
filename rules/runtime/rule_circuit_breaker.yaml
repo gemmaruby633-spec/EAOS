@@ -1,6 +1,4 @@
-rule_id: rule_circuit_breaker
-category: runtime
-enabled: true
-description: "Circuit breaker threshold 5 failures"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-RT-001"
+name: "Circuit Breaker Resilience Policy"
+category: "RUNTIME"
+error_rate_threshold: 0.05

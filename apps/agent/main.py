@@ -1,46 +1,24 @@
-"""AI Agent Interface Application for EAOS."""
+"""Executable entrypoint for EAOS Agent Application."""
 
-import time
-from typing import Any
+from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+import asyncio
+import sys
 
-
-class AgentPromptRequest(BaseModel):
-    """Value object for AI Agent prompt requests."""
-
-    model_config = ConfigDict(frozen=True)
-
-    agent_id: str
-    prompt: str
-    parameters: dict[str, Any]
+from agents.orchestrator import AutonomousAgentSwarm
 
 
-class AgentInteractionResponse(BaseModel):
-    """Value object for AI Agent execution responses."""
+def main() -> None:
+    """Main agent application execution entrypoint."""
+    goal = sys.argv[1] if len(sys.argv) > 1 else "Autonomous System Health Audit"
+    print("=== EAOS Agent Application Driver ===")
+    print(f"Executing goal: '{goal}'")
 
-    model_config = ConfigDict(frozen=True)
+    swarm = AutonomousAgentSwarm()
+    results = asyncio.run(swarm.run_full_swarm(goal, mode="AUTO"))
 
-    interaction_id: str
-    agent_id: str
-    output_text: str
-    execution_time_ms: float
+    print(f"✔ Completed {len(results)} agent steps successfully.")
 
 
-class AgentInterfaceRunner:
-    """Controller orchestrating AI Agent interaction workflows."""
-
-    def process_agent_request(
-        self,
-        request: AgentPromptRequest,
-    ) -> AgentInteractionResponse:
-        """Executes prompt against agent and formats response."""
-        start_time = time.perf_counter()
-        elapsed_ms = (time.perf_counter() - start_time) * 1000
-
-        return AgentInteractionResponse(
-            interaction_id=f"act_{int(time.time())}",
-            agent_id=request.agent_id,
-            output_text=f"Processed prompt for agent '{request.agent_id}'",
-            execution_time_ms=round(elapsed_ms, 3),
-        )
+if __name__ == "__main__":
+    main()

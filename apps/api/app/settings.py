@@ -1,15 +1,20 @@
-"""Pydantic Settings and Environment Configuration for Gateway."""
+"""API Application Settings."""
 
-from pydantic import BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class GatewaySettings(BaseModel):
-    """Application level environment settings."""
+class APISettings(BaseSettings):
+    """Configuration settings for EAOS API Gateway."""
 
-    app_name: str = "EAOS API Gateway"
+    model_config = SettingsConfigDict(
+        env_prefix="EAOS_API_", env_file=".env", extra="ignore"
+    )
+    title: str = "EAOS API Gateway"
     version: str = "0.1.0"
-    environment: str = "production"
-    database_url: str = "postgresql://eaos:eaos@localhost:5433/eaos"
+    host: str = "127.0.0.1"
+    port: int = 8000
+    debug: bool = False
 
 
-settings = GatewaySettings()
+GatewaySettings = APISettings
+api_settings = APISettings()

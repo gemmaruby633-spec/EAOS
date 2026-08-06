@@ -1,17 +1,34 @@
+"""Memory Domain Ports."""
+
 from typing import Protocol
 
 from packages.memory.domain.entities import MemoryRecord
 
 
 class MemoryRepositoryPort(Protocol):
-    """Port định nghĩa các hành vi lưu vết lịch sử bộ nhớ vĩnh cửu."""
+    """Repository Port for Memory Persistence."""
 
-    def save(self, record: MemoryRecord) -> MemoryRecord: ...
+    def save(self, record: MemoryRecord) -> MemoryRecord:
+        """Saves a memory record."""
+        ...
 
-    def find_by_id(self, record_id: str) -> MemoryRecord | None: ...
+    def get_by_id(self, record_id: str) -> MemoryRecord | None:
+        """Retrieves a memory record by ID."""
+        ...
 
-    def query_memories(self, keyword: str) -> list[MemoryRecord]: ...
+    def find_by_id(self, record_id: str) -> MemoryRecord | None:
+        """Retrieves a memory record by ID."""
+        ...
 
-    def vector_search(self, query: str, limit: int = 5) -> list[MemoryRecord]: ...
+    def list_all(self) -> list[MemoryRecord]:
+        """Lists all stored memory records."""
+        ...
 
-    def list_all(self) -> list[MemoryRecord]: ...
+    def search(
+        self,
+        query: str = "",
+        limit: int = 10,
+        user_id: str = "",
+    ) -> list[MemoryRecord]:
+        """Search memory records matching query string."""
+        ...

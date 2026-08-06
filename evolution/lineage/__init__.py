@@ -1,1 +1,1 @@
-""
+"""Architectural Lineage Package."""

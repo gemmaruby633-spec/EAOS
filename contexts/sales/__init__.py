@@ -1,1 +1,1 @@
-""
+"""Sales Bounded Context Package."""

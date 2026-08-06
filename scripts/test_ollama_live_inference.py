@@ -1,18 +1,18 @@
 """Live integration test script invoking Ollama LLM via EAOS AI Adapter."""
 
 import asyncio
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Bootstrap root workspace path into sys.path
 _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from platform_services.ai.ollama_adapter import (  # noqa: E402
+from platforms.ai.ollama_adapter import (  # noqa: E402
     OllamaAdapter,
 )
-from platform_services.ai.ports import LLMRequestDTO  # noqa: E402
+from platforms.ai.ports import LLMRequestDTO  # noqa: E402
 
 
 async def main() -> None:

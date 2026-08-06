@@ -20,7 +20,7 @@ def repair_gateway() -> None:
         "    AmendmentProposal,\n"
         "    ConstitutionalAmendmentEngine,\n"
         ")\n"
-        "from platform_services.telemetry.telemetry_fitness import (\n"
+        "from platforms.telemetry.telemetry_fitness import (\n"
         "    TelemetryFitnessBridge,\n"
         ")\n"
         "from tools.validate.pre_commit_hook import "
@@ -32,7 +32,7 @@ def repair_gateway() -> None:
         stripped = line.strip()
         if (
             "from tools.validate.pre_commit_hook import" in stripped
-            or "from platform_services.telemetry.telemetry_fitness import" in stripped
+            or "from platforms.telemetry.telemetry_fitness import" in stripped
             or "from kernel.governance.constitution_amendment import" in stripped
             or stripped
             in (

@@ -1,0 +1,17 @@
+runbook_id: RB-BACKUP-OPS-001
+capability_id: OPS-CAP-BACKUP
+title: Knowledge & Data Backup Runbook
+automated: true
+steps:
+  - step: 1
+    name: verify_storage_capacity
+    action: check_minio_and_disk
+  - step: 2
+    name: snapshot_postgres
+    action: create_pgvector_backup
+  - step: 3
+    name: export_knowledge_graph
+    action: export_neo4j_cypher
+  - step: 4
+    name: verify_checksum
+    action: generate_sha256_evidence

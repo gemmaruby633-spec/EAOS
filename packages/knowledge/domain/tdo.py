@@ -14,7 +14,7 @@ class TDOFixity(BaseModel):
 
 
 class TDOPromptProvenance(BaseModel):
-    """Nguá»“n gá»‘c lá»‹ch sá»­ khá»Ÿi táº¡o tÃ i liá»‡u chuáº©n bá»Ÿi Con ngÆ°á»i hay AI."""
+    """Nguá»“n gá»‘c lá»‹ch sá»­ khá»Ÿi táº¡o tÃ i liá»‡u chuáº©n bá»Ÿi Con ngÆ°á»i hay ai."""
 
     author: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))

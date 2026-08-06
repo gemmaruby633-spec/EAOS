@@ -37,10 +37,10 @@ class FileSystemCodebaseScannerAdapter(CodebaseScannerPort):
                 if p.is_dir() and not p.name.startswith((".", "_")):
                     components.add(f"packages/{p.name}")
 
-        services_dir = root_dir / "platform_services"
+        services_dir = root_dir / "platforms"
         if services_dir.exists():
             for s in services_dir.iterdir():
                 if s.is_dir() and not s.name.startswith((".", "_")):
-                    components.add(f"platform_services/{s.name}")
+                    components.add(f"platforms/{s.name}")
 
         return components

@@ -3,12 +3,14 @@
 import logging
 import time
 from typing import Any
-from engine.capability.registry import EnterpriseCapabilityRegistry
+
 from packages.capability.domain.models import (
     CapabilityExecutionResultDTO,
     DomainEvent,
     EnterpriseCommandDTO,
 )
+
+from engine.capability.registry import EnterpriseCapabilityRegistry
 
 logger = logging.getLogger(__name__)
 

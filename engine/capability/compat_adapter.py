@@ -1,10 +1,12 @@
 """Compatibility adapter mapping legacy registry callers to new services."""
 
 from typing import Any
-from engine.capability.lifecycle import CapabilityLifecycleService
-from engine.capability.registry import CapabilityRegistry
+
 from packages.capability.compat.capability import BusinessCapability
 from packages.shared.governance.deprecation import deprecated_api
+
+from engine.capability.lifecycle import CapabilityLifecycleService
+from engine.capability.registry import CapabilityRegistry
 
 
 class CapabilityCompatibilityAdapter:

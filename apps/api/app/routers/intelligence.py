@@ -1,27 +1,15 @@
-"""Intelligence router handling FinOps routing, drift guard, and search."""
+"""Intelligence and Model Drift Router."""
 
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body
-from packages.intelligence.infrastructure.adapters import (
-    ModelDriftGuardAdapter,
-)
-from packages.intelligence.infrastructure.model_router import (
-    FinOpsModelRouter,
-    ModelRoutingDecision,
-)
-from packages.memory.infrastructure.hybrid_graph_vector import (
-    HybridGraphVectorRetriever,
-    HybridSearchResult,
-)
+from packages.intelligence.infrastructure.adapters import ModelDriftGuardAdapter
+from packages.intelligence.infrastructure.model_router import FinOpsModelRouter, ModelRoutingDecision
 
-router = APIRouter(prefix="", tags=["Intelligence"])
-drift_guard = ModelDriftGuardAdapter()
-finops_router = FinOpsModelRouter()
-hybrid_retriever = HybridGraphVectorRetriever()
+router = APIRouter(prefix="/intelligence", tags=["Intelligence"])
 
 
-@router.post("/intelligence/drift/evaluate")
+@router.post("/drift/evaluate")
 async def evaluate_model_drift(
     request: dict[str, Any] | None = None,
     prompt: Annotated[str | None, Body(embed=True)] = None,
@@ -39,15 +27,14 @@ async def evaluate_model_drift(
         if not b_text:
             b_text = str(request.get("baseline", ""))
 
-    report = drift_guard.evaluate_drift(
-        prompt=p_text or "",
-        response=r_text or "",
-        baseline=b_text or "",
+    guard = ModelDriftGuardAdapter()
+    report = guard.evaluate_drift(
+        prompt=p_text or "", response=r_text or "", baseline=b_text or ""
     )
     return report.model_dump()
 
 
-@router.post("/intelligence/models/route")
+@router.post("/models/route")
 async def route_intelligence_model(
     request: dict[str, Any] | None = None,
     prompt: Annotated[str | None, Body(embed=True)] = None,
@@ -61,21 +48,8 @@ async def route_intelligence_model(
         if b_usd is None:
             b_usd = float(request.get("max_budget_usd", 0.05))
 
-    return finops_router.route_task(
+    router = FinOpsModelRouter()
+    return router.route_task(
         prompt=p_text or "default task",
         max_budget_usd=b_usd if b_usd is not None else 0.05,
     )
-
-
-@router.post("/memory/hybrid-search")
-async def hybrid_memory_search(
-    request: dict[str, Any] | None = None,
-    query: Annotated[str | None, Body(embed=True)] = None,
-) -> list[HybridSearchResult]:
-    search_query = query
-    if not search_query and isinstance(request, dict):
-        search_query = str(request.get("query", ""))
-    if not search_query:
-        search_query = "Architecture Rules"
-
-    return hybrid_retriever.hybrid_search(query=search_query)

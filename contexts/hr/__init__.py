@@ -1,1 +1,1 @@
-""
+"""HR Bounded Context Package."""

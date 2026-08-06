@@ -1,7 +1,8 @@
 """Framework Runtime & Knowledge Graph Domain Models for EAOS."""
 
-from packages.frameworks.domain.models import EAFrameworkType
 from pydantic import BaseModel, ConfigDict, Field
+
+from packages.frameworks.domain.models import EAFrameworkType
 
 
 class GraphNodeVO(BaseModel):

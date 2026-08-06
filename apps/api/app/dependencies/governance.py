@@ -1,20 +1,8 @@
-"""FastAPI Dependency Injection providers for Governance Capability."""
+"""Governance FastAPI Dependencies."""
 
 from typing import Any
-from apps.api.bootstrap.container import (
-    policy_evaluator,
-    prometheus_exporter,
-    topology_use_case,
-)
 
 
-def get_topology_use_case() -> Any:
-    return topology_use_case
-
-
-def get_prometheus_exporter() -> Any:
-    return prometheus_exporter
-
-
-def get_policy_evaluator() -> Any:
-    return policy_evaluator
+def get_governance_context() -> dict[str, Any]:
+    """Dependency returning current governance context."""
+    return {"status": "ACTIVE", "constitution": "ARCHITECTURE_CONSTITUTION.md v3.0"}

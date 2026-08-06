@@ -1,35 +1,65 @@
-"""Portfolio manager tracking initiatives, programs, and investment goals."""
+"""Lớp Facade trung tâm duy trì tính Tương thích ngược 100%."""
 
-from pydantic import BaseModel, ConfigDict
+from __future__ import annotations
+
+from typing import Any
+
+from automation.dry_run_simulator import DryRunSimulator
+from epics.epic_engine import EpicEngine
+from epics.models import WSJFScore
+from initiatives.initiative_engine import InitiativeEngine
+from investment.valuation_engine import ValuationEngine
+from programs.program_engine import ProgramEngine
+from projects.project_engine import ProjectEngine
 
 
-class InitiativeDTO(BaseModel):
-    """Value object representing an enterprise portfolio initiative."""
+class InvestmentManager:
+    """Facade hợp nhất điều phối toàn bộ phân hệ PORTFOLIO."""
 
-    model_config = ConfigDict(frozen=True)
+    def __init__(self) -> None:
+        self.epic_engine = EpicEngine()
+        self.initiative_engine = InitiativeEngine()
+        self.valuation_engine = ValuationEngine()
+        self.program_engine = ProgramEngine()
+        self.project_engine = ProjectEngine()
 
-    initiative_id: str
-    title: str
-    budget_usd: float
-    status: str
+    def evaluate_investment_proposal(
+        self,
+        base_investment: float,
+        cash_flows: list[float],
+    ) -> dict[str, Any]:
+        """Đánh giá đề xuất đầu tư bằng Monte Carlo và mã hóa."""
+        val = self.valuation_engine.run_monte_carlo_valuation(base_investment, cash_flows)
+        return {
+            "NPV": val.npv,
+            "OptionValue": val.option_value,
+            "EvidenceProof": val.quantum_evidence_hash,
+        }
 
+    def register_and_score_epic(
+        self,
+        epic_id: str,
+        title: str,
+        owner: str,
+        user_val: float,
+        time_crit: float,
+        rroe: float,
+        job_size: float,
+    ) -> float:
+        """Đăng ký Epic và trả về điểm số WSJF."""
+        wsjf = WSJFScore(
+            user_value=user_val,
+            time_criticality=time_crit,
+            rroe=rroe,
+            job_size=job_size,
+        )
+        epic = self.epic_engine.register_epic(epic_id, title, owner, wsjf)
+        return epic.wsjf.score
 
-class PortfolioManagerEngine:
-    """Engine governing initiatives, programs, and strategic investments."""
-
-    def list_initiatives(self) -> list[InitiativeDTO]:
-        """Lists active enterprise transformation initiatives."""
-        return [
-            InitiativeDTO(
-                initiative_id="INIT-2026-01",
-                title="EAOS Cybernetic Autonomous Evolution",
-                budget_usd=150000.0,
-                status="IN_PROGRESS",
-            ),
-            InitiativeDTO(
-                initiative_id="INIT-2026-02",
-                title="Post-Quantum ZK Attestation Integration",
-                budget_usd=200000.0,
-                status="APPROVED",
-            ),
-        ]
+    def simulate_reallocation(
+        self,
+        current: dict[str, float],
+        delta: dict[str, float],
+    ) -> dict[str, Any]:
+        """Thực hiện mô phỏng chuyển ngân sách an toàn."""
+        return DryRunSimulator.simulate_budget_reallocation(current, delta)

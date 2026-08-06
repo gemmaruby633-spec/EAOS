@@ -100,3 +100,7 @@ class GovernanceLoopEngine:
             evidence_logs=logs,
             timestamp=datetime.now(UTC),
         )
+
+
+class CyberneticLoopEngine:
+    pass

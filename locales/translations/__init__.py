@@ -1,0 +1,1 @@
+"""Locales JSON Catalog Storage."""

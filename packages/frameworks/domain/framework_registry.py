@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import builtins
 
-from packages.frameworks.domain.models import FrameworkMetadataVO
 from pydantic import BaseModel, ConfigDict, Field
+
+from packages.frameworks.domain.models import FrameworkMetadataVO
 
 
 class FrameworkRegistry(BaseModel):

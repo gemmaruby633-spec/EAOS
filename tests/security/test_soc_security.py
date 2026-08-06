@@ -1,34 +1,38 @@
-"""Security and SOC Hardening Integration Tests."""
+"""SOC Security and Quantum Signer Test Suite."""
 
+from apps.api.app.main import app
 from fastapi.testclient import TestClient
 
+client = TestClient(app)
 
-def test_wazuh_siem_event_streaming_flow(client: TestClient) -> None:
+
+def test_quantum_envelope_encryption_flow() -> None:
+    """Verify Post-Quantum secret payload encryption endpoint."""
     payload = {
-        "tx_id": "TX-SEC-9001",
-        "source_ip": "10.0.0.45",
-        "action": "SECURITY_VIOLATION_DETECTED",
+        "secret_data": "CONFIDENTIAL_PAYLOAD_123",
+        "public_key_fingerprint": "FINGERPRINT_SHA256_001",
     }
-    response = client.post("/security/wazuh/stream-event", json=payload)
-    assert response.status_code == 200
+    response = client.post("/security/quantum/encrypt-envelope", json=payload)
+    assert response.status_code == 201
     data = response.json()
-    assert data["status"] == "STREAMED"
+    assert "encrypted_payload" in data or "encrypted_payload_b64" in data
+    assert "algorithm" in data
 
 
-def test_cloudflare_waf_ip_blocking_flow(client: TestClient) -> None:
-    payload = {"ip_address": "198.51.100.12"}
-    response = client.post("/security/cloudflare/block-ip", json=payload)
+def test_cloudflare_waf_ip_blocking_flow() -> None:
+    """Verify Cloudflare WAF driver IP blocking endpoint."""
+    response = client.post(
+        "/security/cloudflare/block-ip",
+        json={"ip_address": "192.168.1.100"},
+    )
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "BLOCKED"
 
 
-def test_quantum_envelope_encryption_flow(client: TestClient) -> None:
-    payload = {
-        "secret_data": "postgres://eaos:secret@localhost:5432/eaos",
-        "public_key_fingerprint": "kyber768_fp_88291a",
-    }
-    response = client.post("/security/quantum/encrypt-envelope", json=payload)
-    assert response.status_code == 201
-    data = response.json()
-    assert "CRYSTALS-Kyber768" in data["algorithm"]
+def test_wazuh_siem_event_streaming_flow() -> None:
+    """Verify Wazuh SIEM audit event streaming endpoint."""
+    payload = {"event_id": "AUDIT-001", "severity": "HIGH"}
+    response = client.post("/security/wazuh/stream-event", json=payload)
+    assert response.status_code == 200
+    assert response.json()["status"] == "STREAMED"

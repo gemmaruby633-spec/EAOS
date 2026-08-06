@@ -1,1 +1,1 @@
-""
+"""ERP Bounded Context Package."""

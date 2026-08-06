@@ -1,45 +1,76 @@
-"""User registration and identity management use cases."""
+"""Identity Application Use Cases (S-Tier Capability)."""
 
-import hashlib
-from typing import Any
+from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+import uuid
+from datetime import UTC, datetime, timedelta
+
+import bcrypt
+import jwt
+from pydantic import BaseModel, EmailStr
 
 from packages.identity.domain.models import User
+from packages.identity.domain.ports import UserRepository
 
 
 class RegisterUserRequest(BaseModel):
-    """DTO request model for user registration."""
-
-    model_config = ConfigDict(frozen=True)
-
-    email: str
+    email: EmailStr
     username: str
     password: str
 
 
-class RegisterUserUseCase:
-    """Use case processing user registration."""
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
-    def __init__(self, user_repo: Any) -> None:
-        self.user_repo = user_repo
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class RegisterUserUseCase:
+    """Use case đăng ký người dùng mới, mã hóa mật khẩu bằng bcrypt."""
+
+    def __init__(self, repository: UserRepository) -> None:
+        self.repository = repository
 
     def execute(self, request: RegisterUserRequest) -> User:
-        """Hashes password and persists user entity."""
-        salt = f"eaos_salt_{request.username}"
-        hashed_bytes = hashlib.pbkdf2_hmac(
-            "sha256",
-            request.password.encode("utf-8"),
-            salt.encode("utf-8"),
-            100000,
-        )
+        existing_user = self.repository.find_by_email(request.email)
+        if existing_user:
+            raise ValueError(f"User with email {request.email} already exists")
 
-        user_id = f"usr_{hash(request.email) & 0xFFFFFF:06x}"
+        salt = bcrypt.gensalt()
+        hashed_pw = bcrypt.hashpw(request.password.encode("utf-8"), salt).decode("utf-8")
+
         user = User(
-            id=user_id,
+            id=str(uuid.uuid4()),
             email=request.email,
-            username=request.username,
-            hashed_password=hashed_bytes.hex(),
+            username=request.username.strip(),
+            hashed_password=hashed_pw,
         )
-        self.user_repo.save(user)
-        return user
+        return self.repository.save(user)
+
+
+class AuthenticateUserUseCase:
+    """Use case xác thực người dùng và cấp JWT Token."""
+
+    def __init__(self, repository: UserRepository, secret_key: str) -> None:
+        self.repository = repository
+        self.secret_key = secret_key
+        self.algorithm = "HS256"
+        self.access_token_expire_minutes = 60
+
+    def execute(self, request: LoginRequest) -> TokenResponse:
+        user = self.repository.find_by_email(request.email)
+        if not user or not bcrypt.checkpw(request.password.encode("utf-8"), user.hashed_password.encode("utf-8")):
+            raise ValueError("Invalid email or password")
+
+        if not user.is_active:
+            raise ValueError("User is inactive")
+
+        expire = datetime.now(UTC) + timedelta(minutes=self.access_token_expire_minutes)
+        payload = {"sub": user.email, "exp": int(expire.timestamp())}
+        token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+
+        return TokenResponse(access_token=token)

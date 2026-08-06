@@ -2,8 +2,9 @@
 
 from pathlib import Path
 
-from packages.frameworks.domain.rule_toolkit import RuleToolkitEngine
 from pydantic import BaseModel, ConfigDict
+
+from packages.frameworks.domain.rule_toolkit import RuleToolkitEngine
 
 
 class ValidationReportDTO(BaseModel):

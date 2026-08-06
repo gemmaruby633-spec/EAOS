@@ -2,10 +2,11 @@
 
 from pathlib import Path
 
+from pydantic import BaseModel, ConfigDict
+
 from packages.frameworks.application.architecture_validator import (
     ExecutableArchitectureValidator,
 )
-from pydantic import BaseModel, ConfigDict
 
 
 class GoNoGoEvaluationDTO(BaseModel):

@@ -1,0 +1,46 @@
+<div class="p-5 bg-slate-900 border border-slate-800 rounded-lg space-y-4">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h2 class="text-sm font-bold text-amber-400">Federation & Raft Consensus Cluster</h2>
+        <button onclick="fetchRaftCluster()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded text-slate-200 transition-colors">
+            Refresh Cluster State
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse font-mono text-xs">
+            <thead>
+                <tr class="border-b border-slate-800 text-slate-400 text-[11px]">
+                    <th class="py-2 px-3">NODE ID</th>
+                    <th class="py-2 px-3">ROLE</th>
+                    <th class="py-2 px-3">STATE</th>
+                    <th class="py-2 px-3">TERM</th>
+                    <th class="py-2 px-3">CONNECTED PEERS</th>
+                </tr>
+            </thead>
+            <tbody id="raft-table-body">
+                <tr><td colspan="5" class="py-4 text-center text-slate-500">Querying Raft consensus nodes...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function fetchRaftCluster() {
+        try {
+            const res = await fetch(`${API_BASE}/dashboard/federation/raft-cluster`);
+            const data = await res.json();
+            const tbody = document.getElementById('raft-table-body');
+            tbody.innerHTML = data.map(n => `
+                <tr class="border-b border-slate-800/60">
+                    <td class="py-3 px-3 font-bold text-cyan-400">${n.node_id}</td>
+                    <td class="py-3 px-3 text-amber-400">${n.role}</td>
+                    <td class="py-3 px-3 text-emerald-400">${n.state}</td>
+                    <td class="py-3 px-3 text-slate-200">${n.term}</td>
+                    <td class="py-3 px-3 text-slate-400">${n.connected_peers.join(', ')}</td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    fetchRaftCluster();
+</script>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-4 gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-cyan-400">EAOS Cybernetic Control Room</h1>
+                <p class="text-xs text-slate-400">Enterprise Architecture Operating System | Level 5 Evolutionary Core</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div id="api-status-indicator" class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                    <span>API Gateway: Checking...</span>
+                </div>
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    ● Web UI: Active
+                </span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs 1 to 4 -->
+        <div class="flex border-b border-slate-800 space-x-6 text-xs font-semibold overflow-x-auto">
+            <button onclick="switchTab('tab1')" id="btn-tab1" class="pb-3 border-b-2 border-cyan-400 text-cyan-400 transition-colors whitespace-nowrap">
+                1. Capabilities Map
+            </button>
+            <button onclick="switchTab('tab2')" id="btn-tab2" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors whitespace-nowrap">
+                2. Fitness & Constitutional Drift
+            </button>
+            <button onclick="switchTab('tab3')" id="btn-tab3" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors whitespace-nowrap">
+                3. Autonomous Swarm & Self-Rewrite
+            </button>
+            <button onclick="switchTab('tab4')" id="btn-tab4" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors whitespace-nowrap">
+                4. Federation & Raft Cluster State
+            </button>
+        </div>
+
+        <!-- TAB 1 CONTENT -->
+        <div id="content-tab1" class="space-y-6">
+            {% include 'components/capabilities_map.html' %}
+        </div>
+
+        <!-- TAB 2 CONTENT -->
+        <div id="content-tab2" class="space-y-6 hidden">
+            {% include 'components/fitness_dashboard.html' %}
+        </div>
+
+        <!-- TAB 3 CONTENT -->
+        <div id="content-tab3" class="space-y-6 hidden">
+            {% include 'components/swarm_control.html' %}
+        </div>
+
+        <!-- TAB 4 CONTENT -->
+        <div id="content-tab4" class="space-y-6 hidden">
+            {% include 'components/raft_cluster.html' %}
+        </div>
+
+    </div>
+
+    <script>
+        const API_BASE = "http://localhost:8000";
+
+        function switchTab(tabId) {
+            ['tab1', 'tab2', 'tab3', 'tab4'].forEach(t => {
+                document.getElementById(`content-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors whitespace-nowrap";
+            });
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).className = "pb-3 border-b-2 border-cyan-400 text-cyan-400 transition-colors whitespace-nowrap";
+        }
+
+        async function checkApiGateway() {
+            const indicator = document.getElementById('api-status-indicator');
+            try {
+                const res = await fetch(`${API_BASE}/health`, { method: 'GET', signal: AbortSignal.timeout(2000) });
+                if (res.ok) {
+                    indicator.className = "flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                    indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>API Gateway: Online (:8000)</span>`;
+                } else { throw new Error(); }
+            } catch (err) {
+                indicator.className = "flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span><span>API Gateway: Offline</span>`;
+            }
+        }
+        checkApiGateway();
+        setInterval(checkApiGateway, 5000);
+    </script>
+</body>
+</html>

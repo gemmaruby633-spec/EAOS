@@ -1,0 +1,15 @@
+[project]
+name = "eaos-ai-gateway"
+version = "0.1.0"
+description = "EAOS ai_gateway Domain Package"
+readme = "README.md"
+requires-python = ">=3.14"
+
+dependencies = []
+
+[build-system]
+requires = ["hatchling>=1.28"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]

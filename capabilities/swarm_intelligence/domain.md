@@ -1,0 +1,4 @@
+# EAOS SWARM INTELLIGENCE Domain Model
+
+## Entities
+- Entity: SWARM INTELLIGENCE

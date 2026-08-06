@@ -1,6 +1,6 @@
 """OpenTelemetry exporter factories for OTLP gRPC and HTTP."""
 
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import (  # type: ignore[import-not-found]
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter,
 )
 

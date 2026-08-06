@@ -4,44 +4,70 @@ import json
 import sys
 from pathlib import Path
 
-# Ensure EAOS root is in sys.path
+import structlog
+from pydantic import BaseModel, ConfigDict
+
 ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
+
+logger = structlog.get_logger()
+
+
+class AntigravityAgentPayload(BaseModel):
+    """Agent payload DTO for stdin JSON parsing."""
+
+    model_config = ConfigDict(frozen=True)
+
+    prompt: str = "EAOS Architecture Verification"
+    agent_role: str = "Architect"
+
+
+class AntigravityAgentResponse(BaseModel):
+    """Agent response DTO for stdout JSON serialization."""
+
+    model_config = ConfigDict(frozen=True)
+
+    status: str
+    agent_role: str
+    prompt: str
+    analysis: str
+    governance_status: str
 
 
 def main() -> None:
     """Reads JSON prompt from stdin and returns structured JSON response."""
     try:
         input_data = sys.stdin.read()
-        payload = json.loads(input_data) if input_data.strip() else {}
+        raw_payload = json.loads(input_data) if input_data.strip() else {}
+        payload = AntigravityAgentPayload(**raw_payload)
 
-        prompt = payload.get("prompt", "EAOS Architecture Verification")
-        role = payload.get("agent_role", "Architect")
+        from tools.graph.system_integration_auditor import SystemIntegrationAuditor
 
-        # Import topology use case via DI Container
-        from apps.api.app.container import topology_use_case
+        auditor = SystemIntegrationAuditor(ROOT_DIR)
+        snapshot = auditor.audit_topological_connectivity()
 
-        snapshot = topology_use_case.get_audit_report()
-
-        response = {
-            "status": "SUCCESS",
-            "agent_role": role,
-            "prompt": prompt,
-            "analysis": (
-                f"Agent [{role}] evaluated task against EAOS Constitution v3.0. "
-                f"Active source files: {snapshot.active_source_files}, "
-                f"Health Score: {snapshot.calculated_health_score:.1f}%"
+        status_text = "HEALTHY" if snapshot.all_connected else "DEGRADED"
+        response = AntigravityAgentResponse(
+            status="SUCCESS",
+            agent_role=payload.agent_role,
+            prompt=payload.prompt,
+            analysis=(
+                f"Agent [{payload.agent_role}] evaluated task against "
+                f"EAOS Constitution v3.0. Total directories: "
+                f"{snapshot.total_root_directories}, "
+                f"Active count: {snapshot.active_directories_count}"
             ),
-            "governance_status": snapshot.audit_status,
-        }
-        print(json.dumps(response, indent=2))
+            governance_status=status_text,
+        )
+        sys.stdout.write(json.dumps(response.model_dump(), indent=2) + "\n")
     except Exception as e:
+        logger.error("Agent Script Execution Failed", error=str(e))
         error_resp = {
             "status": "ERROR",
             "message": f"Agent Script Execution Failed: {e}",
         }
-        print(json.dumps(error_resp, indent=2))
+        sys.stdout.write(json.dumps(error_resp, indent=2) + "\n")
         sys.exit(1)
 
 

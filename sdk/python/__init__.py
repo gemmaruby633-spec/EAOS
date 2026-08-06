@@ -1,5 +1,7 @@
-"""EAOS Python SDK Package."""
+"""SDK python package."""
 
-from sdk.python.eaos_sdk import EAOSClient, EAOSClientConfig, EAOSClientSDK
+from __future__ import annotations
 
-__all__ = ["EAOSClient", "EAOSClientConfig", "EAOSClientSDK"]
+from .eaos_sdk import EAOSClientConfig, EAOSClientSDK
+
+__all__ = ["EAOSClientConfig", "EAOSClientSDK"]

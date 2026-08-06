@@ -1,1 +1,0 @@
-"""SECURITY EAOS layer package."""

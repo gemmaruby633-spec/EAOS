@@ -1,0 +1,8 @@
+{
+  "name": "@eaos/locales",
+  "version": "0.1.0",
+  "description": "EAOS Centralized i18n Translations for TypeScript and JavaScript",
+  "main": "index.ts",
+  "types": "index.ts",
+  "license": "Proprietary"
+}

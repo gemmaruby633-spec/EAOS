@@ -1,6 +1,4 @@
-rule_id: rule_line_length_max
-category: engineering
-enabled: true
-description: "Strict line length under 88 characters"
-severity: CRITICAL
-action: BLOCK
+rule_id: "RULE-ENG-001"
+name: "Strict Code Line Length Policy"
+category: "ENGINEERING"
+max_line_length: 79

@@ -1,17 +1,2 @@
-# foundation
-
-## Purpose
-
-This directory is reserved for future work.
-
-## Responsibilities
-
-No responsibilities are defined.
-
-## Not Responsible For
-
-No exclusions are defined.
-
-## Future Work
-
-To be determined.
+# Phân Hệ Foundation View (oundation/)
+Động cơ nạp và xuất chiếu sơ đồ ma trận Hiến pháp và Quản trị.

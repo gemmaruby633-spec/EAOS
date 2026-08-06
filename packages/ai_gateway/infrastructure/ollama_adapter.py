@@ -1,7 +1,9 @@
 """Ollama Infrastructure Adapter implementing LLMProviderPort."""
 
 import logging
+
 import httpx
+
 from packages.ai_gateway.domain.models import (
     AIProviderTimeoutError,
     AIProviderUnavailableError,
