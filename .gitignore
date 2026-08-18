@@ -23,7 +23,7 @@ dist/
 .uv/
 .pytest_tmp/
 
-# --- 2. ENVIRONMENT & SECRETS (Bảo mật tuyệt đối) ---
+# --- 2. ENVIRONMENT & SECRETS (Bß║úo mß║¡t tuyß╗çt ─æß╗æi) ---
 .env
 .env.*
 !.env.example
@@ -66,7 +66,7 @@ generated/compiler/*
 ehthumbs.db
 Thumbs.db
 
-# Giữ lại cấu hình extension/settings chung của VSCode, ẩn các file rác cá nhân
+# Giß╗» lß║íi cß║Ñu h├¼nh extension/settings chung cß╗ºa VSCode, ß║⌐n c├íc file r├íc c├í nh├ón
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
@@ -100,7 +100,7 @@ dist/
 conda-meta/
 .conda/
 
-# --- 2. ENVIRONMENT VARIABLES & SECRETS (Bảo mật tối thượng) ---
+# --- 2. ENVIRONMENT VARIABLES & SECRETS (Bß║úo mß║¡t tß╗æi th╞░ß╗úng) ---
 .env
 .env.*
 !.env.example
@@ -221,3 +221,19 @@ runtime/tmp/*
 runtime/traces/*
 runtime/backups/*
 generated/architecture/time_machine/*
+
+# ============================================================
+# EAOS INTERNAL RECOVERY / EPHEMERAL ARTIFACTS
+# ============================================================
+
+# Historical backups ΓÇö local recovery material
+.eaos/backups/
+
+# Build/recovery checkpoints ΓÇö local recovery material
+.eaos/checkpoints/
+
+# Generated repair snapshots
+.eaos/repairs/
+
+# Live runtime state ΓÇö never commit mutable runtime state
+.eaos/runtime/
